@@ -1,0 +1,47 @@
+version: '3'
+
+networks:
+  coffeeShop:
+
+services:
+
+  mysqldb:
+    image: mysql:8.0.11
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./dbBackup:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_DATABASE=coffeeShop
+    networks:
+      - coffeeShop
+
+  laravel:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: laravel
+    depends_on:
+      - mysqldb
+    volumes:
+      - ./back:/var/www/html
+    ports:
+      - "8000:8000"
+    command: php artisan serve --host=0.0.0.0
+    networks:
+      - coffeeShop
+
+  react:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: react
+    volumes:
+      - ./front:/react
+      - /front/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - coffeeShop
