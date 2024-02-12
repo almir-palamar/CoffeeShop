@@ -1,0 +1,9 @@
+<?php
+return [
+    'OPENING_TIME' => '08:00',
+    'MAXIMUM_NUMBER_OF_PENDING_ORDERS' => 5,
+    'GRINDER_CAPACITY' => 300,
+    'NUMBER_OF_BARISTAS' => 3,
+    'TIME_IN_SECONDS_TO_REFILL_GRINDER' => 120,
+];
+
