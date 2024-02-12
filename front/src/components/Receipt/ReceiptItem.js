@@ -2,9 +2,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
 import { removeItem } from "../../store/OrderSlice";
-import { Typography } from "@mui/material";
 import { memo } from "react";
 
 function ReceiptItem({ item }) {

@@ -1,4 +1,5 @@
-import { Grid, CircularProgress } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 import Coffee from "../components/Coffee";
 import Receipt from "../components/Receipt/Receipt";
 import api from "../axios/axios";

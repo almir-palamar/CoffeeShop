@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Drawer,
-  Toolbar,
-  List,
-  ListItem,
-  Button,
-  Typography,
-  Divider,
-  CircularProgress,
-} from "@mui/material";
+import Drawer from "@mui/material/Drawer";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import CircularProgress from "@mui/material/CircularProgress";
 import ReceiptItem from "./ReceiptItem";
 import GradingIcon from "@mui/icons-material/Grading";
 import ReorderIcon from "@mui/icons-material/Reorder";
@@ -36,6 +34,7 @@ function Receipt() {
   }, [orderAccepted, orderNo]);
 
   const handleWebSocketEvent = (event) => {
+    setOrderNo(JSON.parse(event.order).id)
     setOrderReady(true);
   };
 
