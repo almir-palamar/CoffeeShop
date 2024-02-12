@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Http\Response\HttpResponse;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +50,10 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception): JsonResponse
+    {
+        return HttpResponse::error($exception->getMessage(), null, 401);
     }
 }
