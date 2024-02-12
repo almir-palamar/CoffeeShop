@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repository\CoffeeRepository;
+use App\Repository\OrderRepository;
 use Illuminate\Support\ServiceProvider;
+use RepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(RepositoryInterface::class, CoffeeRepository::class);
+        $this->app->bind(RepositoryInterface::class, OrderRepository::class);
     }
 
     /**
