@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\EspressoMachine;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<EspressoMachine>
  */
-class UserFactory extends Factory
+class EspressoMachineFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +18,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => fake()->userName(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'name' => 'Breville Barista Express',
+            'grinder' => 300
         ];
     }
-
 }
