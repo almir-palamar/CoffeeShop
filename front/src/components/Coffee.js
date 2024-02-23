@@ -28,7 +28,7 @@ function Coffee({coffee}) {
             position: "relative",
             overflow: "hidden",
           }}
-          image={`${process.env.REACT_APP_BACKEND_URL}storage/${coffee.image}`}
+          image={`${process.env.REACT_APP_BACKEND_URL}/storage/${coffee.image}`}
           title="coffee"
         >
           <CardContent
