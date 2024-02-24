@@ -3,79 +3,59 @@
 namespace App\Repository;
 
 use App\Models\Coffee;
-use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class CoffeeRepository implements RepositoryInterface
 {
     /**
      * @param array $attributes
      * @param null $model
+     * @return mixed
      * @throws Exception
      */
-    public function store($attributes, $model = null)
+    public function store(array $attributes, $model = null): mixed
     {
-        try {
-            DB::beginTransaction();
-            $image = $attributes['image'];
-            $imageName = $image->hashName();
-            Storage::disk('public')->put($imageName, file_get_contents($image));
-            $coffee = Coffee::create([
-                'type' => data_get($attributes, 'type'),
-                'price' => data_get($attributes, 'price'),
-                'image' => $imageName,
-                'brew_time' => data_get($attributes, 'brew_time'),
-                'coffee_amount' => data_get($attributes, 'coffee_amount')
-            ]);
-            if (!$coffee) {
-                throw new Exception('Error while creating coffee');
-            }
-            DB::commit();
-            return $coffee;
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e;
-        }
+        $image = $attributes['image'] ?? null;
+        $imageName = $image ? $image->hashName() : null;
+        $attributes['image'] = $imageName;
 
+        $coffee = Coffee::create($attributes);
+        if ($coffee && $image) {
+            Storage::disk('public')->put($imageName, file_get_contents($image));
+        }
+        return $coffee;
     }
 
-    public function update($attributes, $coffee)
+    /**
+     * @throws Exception
+     */
+    public function update($attributes, $coffee): mixed
     {
-        try {
-            DB::beginTransaction();
-            $image = $attributes['image'];
-            $imageName = $image->hashName();
-            Storage::disk('public')->delete($coffee->image);
-            Storage::disk('public')->put($imageName, file_get_contents($image));
-            $coffee = $coffee->update([
-                'type' => data_get($attributes, 'type'),
-                'price' => data_get($attributes, 'price'),
-                'image' => $imageName,
-                'brew_time' => data_get($attributes, 'brew_time'),
-                'coffee_amount' => data_get($attributes, 'coffee_amount')
-            ]);
-            if (!$coffee) {
-                throw new Exception('Error while updating coffee');
-            }
-            DB::commit();
-            return $coffee;
-        } catch (Exception $e) {
-            DB::rollback();
-            return $e;
+        $newImage = $attributes['image'] ?? null;
+        $newImageName = null;
+        $oldImageName = $coffee->image;
+        if ($newImage) {
+            $newImageName = $newImage->getClientOriginalName() !== $oldImageName ?
+                $newImage->hashName() : $coffee->image;
         }
+        $attributes['image'] = $newImageName;
+        $coffee->update($attributes);
+        if ($newImage) {
+            if ($coffee->image) {
+                Storage::disk('public')->delete($oldImageName);
+            }
+            Storage::disk('public')->put($newImageName, file_get_contents($newImage));
+
+        }
+        if (is_null($newImageName) && $oldImageName !== null) {
+            Storage::disk('public')->delete($oldImageName);
+        }
+        return $coffee;
     }
 
     public function delete($coffee)
     {
-        try {
-            DB::beginTransaction();
-            $coffee->delete();
-            DB::commit();
-            return $coffee;
-        } catch (Exception $e) {
-            DB::rollBack();
-            return $e;
-        }
+        return $coffee->delete();
     }
 }

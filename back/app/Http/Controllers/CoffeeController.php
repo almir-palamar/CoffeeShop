@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCoffeeRequest;
 use App\Http\Response\HttpResponse;
 use App\Models\Coffee;
 use App\Repository\CoffeeRepository;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CoffeeController extends Controller
@@ -39,9 +40,9 @@ class CoffeeController extends Controller
     public function store(StoreCoffeeRequest $request): JsonResponse
     {
         try {
-            $coffee = $this->repository->store($request->all());
-            return HttpResponse::success('Created', $coffee, 201);
-        } catch (\Exception $e) {
+            $result = $this->repository->store($request->validated());
+            return HttpResponse::success('Created', $result, 201);
+        } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);
         }
     }
@@ -56,9 +57,9 @@ class CoffeeController extends Controller
     public function update(UpdateCoffeeRequest $request, Coffee $coffee): JsonResponse
     {
         try {
-            $coffee = $this->repository->update($request->all(), $coffee);
-            return HttpResponse::success('Created', $coffee, 201);
-        } catch (\Exception $e) {
+            $coffee = $this->repository->update($request->validated(), $coffee);
+            return HttpResponse::success('Updated', $coffee);
+        } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);
         }
     }
@@ -73,8 +74,8 @@ class CoffeeController extends Controller
     {
         try {
             $this->repository->delete($coffee);
-            return HttpResponse::success('Deleted', $coffee, 200);
-        } catch (\Exception $e) {
+            return HttpResponse::success('Deleted', $coffee);
+        } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);
         }
     }

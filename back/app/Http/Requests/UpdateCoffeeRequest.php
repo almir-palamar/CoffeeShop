@@ -28,7 +28,7 @@ class UpdateCoffeeRequest extends FormRequest
         return [
             'type' => 'required | string',
             'price' => 'required | numeric',
-            'img_path' => 'nullable | image',
+            'image' => 'nullable | image',
             'brew_time' => 'required | int',
             'coffee_amount' => 'required | int'
         ];

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('type')->unique();
             $table->decimal('price', 10);
-            $table->string('image')->default('no_image.jpg');
+            $table->string('image')->nullable();
             $table->unsignedInteger('brew_time');
             $table->unsignedInteger('coffee_amount');
             $table->softDeletes();

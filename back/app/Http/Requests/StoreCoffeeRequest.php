@@ -26,11 +26,11 @@ class StoreCoffeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|string',
-            'price' => 'required|numeric',
-            'image' => 'required|image',
-            'brew_time' => 'required|int',
-            'coffee_amount' => 'required|int'
+            'type' => 'required | string',
+            'price' => 'required | numeric',
+            'image' => 'nullable | image',
+            'brew_time' => 'required | int',
+            'coffee_amount' => 'required | int'
         ];
     }
 
