@@ -1,7 +1,7 @@
 package com.example.coffeeshop.enums;
 
 public enum OrderEnum {
-    INSTANCE; // singleton
+    INSTANCE;
 
     public enum Type {
         TO_GO,
