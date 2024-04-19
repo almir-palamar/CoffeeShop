@@ -13,18 +13,14 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-
     @ManyToMany
     private List<Coffee> coffees;
-
     @ManyToOne
     @Nullable
     @JoinColumn(name = "barista_id")
     private Barista barista;
-
     @Enumerated(EnumType.STRING)
     private OrderEnum.Type type;
-
     @Enumerated(EnumType.STRING)
     private OrderEnum.Status status;
 

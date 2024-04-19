@@ -38,4 +38,11 @@ public class EspressoMachine {
         this.grinder = grinder;
     }
 
+    public Barista getBarista() {
+        return barista;
+    }
+
+    public void setBarista(Barista barista) {
+        this.barista = barista;
+    }
 }
