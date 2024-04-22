@@ -1,12 +1,12 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.cglib.core.internal.Function;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +19,26 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-//    @Value("$token.secret.key") // getting values from application.properties
-    String jwtSecretKey = "RwvP/VmQwYytTR/QM0wXDW+wXbYoy6v6A08/d6VIfSc="; // generated separately for each server, so make sure to generate our own security key
+    private final JwtProperties jwtProperties;
+    private final String jwtSecretKey;
+    private final Long jwtExpiration;
 
-//    @Value("$token.expiration")
-    Long jwtExpiration = 180000L;
+    @Autowired
+    public JwtService(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
+        this.jwtSecretKey = jwtProperties.getSecret();
+        this.jwtExpiration = jwtProperties.getExpiration();
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        System.out.println("USER DETAILS: " + userDetails.toString());
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("role", userDetails.getAuthorities());
+        return generateToken(claims, userDetails);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

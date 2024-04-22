@@ -34,7 +34,8 @@ public class AuthService {
         User user = new User(
                 registerRequest.getName(),
                 registerRequest.getUsername(),
-                passwordEncoder.encode(registerRequest.getPassword())
+                passwordEncoder.encode(registerRequest.getPassword()),
+                null
         );
         userService.save(user);
         return jwtService.generateToken(user);
@@ -42,8 +43,7 @@ public class AuthService {
 
     public String login(LogInRequest logInRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(logInRequest.getUsername(), logInRequest.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(logInRequest.getUsername(), logInRequest.getPassword()));
         User user = userRepository.findByUsername(logInRequest.getUsername());
         if (user == null) {
             throw new IllegalArgumentException();

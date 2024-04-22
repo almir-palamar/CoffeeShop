@@ -1,6 +1,7 @@
 package com.example.coffeeshop.models;
 
 import com.example.coffeeshop.enums.RoleEnum;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,11 +24,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    public User(String name, String username, String password) {
+    public User(String name, String username, String password, @Nullable RoleEnum role) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.role = RoleEnum.USER; // by default
+        this.role = role != null ? role : RoleEnum.USER;
     }
 
     public User() {}
@@ -42,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User => [" + name + ":" + username + "]";
+        return "User => [" + name + ":" + username + ":" + role +"]";
     }
 
     @Override
@@ -52,12 +53,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
