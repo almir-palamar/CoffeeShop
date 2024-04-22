@@ -13,7 +13,6 @@ import java.util.List;
 public class CoffeeSeeder implements CommandLineRunner {
 
     private final CoffeeRepository coffeeRepository;
-    private final List<Coffee> coffeeList = new ArrayList<>();
 
     @Autowired
     public CoffeeSeeder(CoffeeRepository coffeeRepository) {
@@ -23,9 +22,9 @@ public class CoffeeSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<Coffee> coffeeList = List.of(
-                Coffee espresso = new Coffee("Espresso", 35, 7, 1.00f),
-                Coffee espressoDoppio = new Coffee("Espresso doppio", 45, 14, 2.00f),
-                Coffee cappuccino = new Coffee("Cappuccino", 60, 7, 2.50f)
+                new Coffee("Espresso", 35, 7, 1.00f),
+                new Coffee("Espresso doppio", 45, 14, 2.00f),
+                new Coffee("Cappuccino", 60, 7, 2.50f)
         );
         this.coffeeRepository.saveAll(coffeeList);
     }
