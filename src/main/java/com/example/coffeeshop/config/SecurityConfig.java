@@ -57,9 +57,9 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeConfig ->
                         authorizeConfig
+                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers("/api/user/**").permitAll()
                                 .requestMatchers("/api/order/**").permitAll()
-                                .requestMatchers("/api/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/coffee", "/api/coffee/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/coffee").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/coffee/**").hasAuthority("ADMIN")

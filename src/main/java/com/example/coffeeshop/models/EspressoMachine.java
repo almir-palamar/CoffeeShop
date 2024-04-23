@@ -15,7 +15,7 @@ public class EspressoMachine {
 
     public EspressoMachine(String brand, Integer grinder, Barista barista) {
         this.brand = brand;
-        this.grinder = grinder;
+        this.grinder = grinder != null ? grinder : 300;
         this.barista = barista;
     }
 

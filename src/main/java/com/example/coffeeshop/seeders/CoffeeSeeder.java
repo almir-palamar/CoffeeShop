@@ -5,8 +5,6 @@ import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -19,13 +17,17 @@ public class CoffeeSeeder implements CommandLineRunner {
         this.coffeeRepository = coffeeRepository;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    private void seedCoffees() {
         List<Coffee> coffeeList = List.of(
                 new Coffee("Espresso", 35, 7, 1.00f),
                 new Coffee("Espresso doppio", 45, 14, 2.00f),
                 new Coffee("Cappuccino", 60, 7, 2.50f)
         );
         this.coffeeRepository.saveAll(coffeeList);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        seedCoffees();
     }
 }

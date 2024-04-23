@@ -3,10 +3,7 @@ package com.example.coffeeshop.controllers;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/order")
@@ -28,6 +25,11 @@ public class OrderController {
     @PostMapping("/web-ui")
     public Order orderWebUI(@RequestBody Order order) {
         return this.orderService.save(order);
+    }
+
+    @GetMapping("/{Id}")
+    public Order getOrder(@PathVariable Long Id) {
+        return this.orderService.findById(Id);
     }
 
 }
