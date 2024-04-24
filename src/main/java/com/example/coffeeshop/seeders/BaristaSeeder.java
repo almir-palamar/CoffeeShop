@@ -23,6 +23,8 @@ public class BaristaSeeder implements CommandLineRunner {
         this.espressoMachineRepository = espressoMachineRepository;
     }
 
+    // this should use barista and espresso services
+
     private void seedBaristas() {
         Optional<EspressoMachine> type1 = espressoMachineRepository.findById(1L);
         Optional<EspressoMachine> type2 = espressoMachineRepository.findById(2L);

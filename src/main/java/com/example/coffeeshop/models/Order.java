@@ -34,6 +34,10 @@ public class Order {
     public Order() {
     }
 
+    public Long getId() {
+        return Id;
+    };
+
     public List<Coffee> getCoffees() {
         return coffees;
     }

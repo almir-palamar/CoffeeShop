@@ -1,12 +1,11 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +18,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final JwtProperties jwtProperties;
-    private final String jwtSecretKey;
-    private final Long jwtExpiration;
+    @Value("${jwt.token.secret}")
+    private String jwtSecretKey;
 
-    @Autowired
-    public JwtService(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-        this.jwtSecretKey = jwtProperties.getSecret();
-        this.jwtExpiration = jwtProperties.getExpiration();
-    }
+    @Value("${jwt.token.expiration}")
+    private Long jwtExpiration;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

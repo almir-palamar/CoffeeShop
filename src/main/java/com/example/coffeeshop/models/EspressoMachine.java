@@ -1,5 +1,6 @@
 package com.example.coffeeshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,7 @@ public class EspressoMachine {
     private Long Id;
     private String brand;
     private Integer grinder;
+    @JsonIgnore
     @OneToOne(mappedBy = "espressoMachine")
     private Barista barista;
 
@@ -20,6 +22,10 @@ public class EspressoMachine {
     }
 
     public EspressoMachine() {
+    }
+
+    public Long getId() {
+        return Id;
     }
 
     public String getBrand() {
