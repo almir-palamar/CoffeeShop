@@ -23,7 +23,7 @@ public class BaristaService {
         return this.baristaRepository.saveAll(baristas);
     }
 
-    public List<Barista> findBaristasByStatus() {
+    public List<Barista> findAvailableBaristas() {
         return baristaRepository.findBaristasByStatus(BaristaStatusEnum.AVAILABLE);
     }
 

@@ -17,17 +17,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     public AuthService(UserRepository userRepository,
                        UserService userService,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     public String register(RegisterRequest registerRequest) {
@@ -38,6 +41,7 @@ public class AuthService {
                 null
         );
         userService.save(user);
+        this.emailService.sendWelcomeEmail("user@gmail.com");
         return jwtService.generateToken(user);
     }
 

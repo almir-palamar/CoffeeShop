@@ -1,5 +1,6 @@
 package com.example.coffeeshop.controllers;
 
+import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class OrderController {
     // check this route with middleware
     @PostMapping("/to-go")
     public Order orderToGo(@RequestBody Order order) {
+        order.setType(OrderEnum.Type.TO_GO);
         return this.orderService.save(order);
     }
 

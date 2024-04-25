@@ -18,17 +18,14 @@ public class Order {
     @ManyToOne
     @Nullable
     @JoinColumn(name = "barista_id")
-    private Barista barista;
+    private Barista barista = null;
     @Enumerated(EnumType.STRING)
-    private OrderEnum.Type type;
+    private OrderEnum.Type type = OrderEnum.Type.WEB_UI;
     @Enumerated(EnumType.STRING)
-    private OrderEnum.Status status;
+    private OrderEnum.Status status = OrderEnum.Status.PENDING;
 
-    public Order(List<Coffee> coffees, OrderEnum.Type type, OrderEnum.Status status, @Nullable Barista barista) {
+    public Order(List<Coffee> coffees) {
         this.coffees = coffees;
-        this.type = type;
-        this.status = status;
-        this.barista = barista;
     }
 
     public Order() {

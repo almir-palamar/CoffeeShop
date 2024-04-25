@@ -1,12 +1,8 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.app.order.OrderThread;
-import com.example.coffeeshop.enums.BaristaStatusEnum;
 import com.example.coffeeshop.enums.OrderEnum;
-import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
-import com.example.coffeeshop.repositories.BaristaRepository;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
@@ -23,38 +19,15 @@ public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
-    private final BaristaService baristaService;
-    private final BaristaRepository baristaRepository;
-    private final EspressoMachineService espressoMachineService;
+    private final ProcessOrderService processOrderService;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
                         CoffeeRepository coffeeRepository,
-                        BaristaService baristaService,
-                        EspressoMachineService espressoMachineService, BaristaRepository baristaRepository) {
+                        ProcessOrderService processOrderService) {
         this.orderRepository = orderRepository;
         this.coffeeRepository = coffeeRepository;
-        this.baristaService = baristaService;
-        this.espressoMachineService = espressoMachineService;
-        this.baristaRepository = baristaRepository;
-    }
-
-    @Transactional
-    public Order save(@NonNull Order order) {
-        Barista barista = baristaRepository.findBaristasByStatus(BaristaStatusEnum.AVAILABLE).getFirst();
-        List<Coffee> coffees = new ArrayList<>();
-        order.getCoffees().forEach(item -> {
-            Optional<Coffee> coffee = this.coffeeRepository.findByName(item.getName());
-            coffees.add(coffee.get());
-        });
-        order.setBarista(barista);
-        order.setCoffees(coffees);
-        if (barista != null) {
-            OrderThread orderThread = new OrderThread(
-                    order, this, baristaService, espressoMachineService);
-            orderThread.start();
-        }
-        return this.orderRepository.save(order);
+        this.processOrderService = processOrderService;
     }
 
     public Order findById(Long Id) {
@@ -69,6 +42,21 @@ public class OrderService {
             orderRepository.save(order);
         }
         return order;
+    }
+
+    @Transactional
+    public Order save(@NonNull Order order) {
+        List<Coffee> coffees = new ArrayList<>();
+        order.getCoffees().forEach(item -> {
+            Optional<Coffee> coffee = this.coffeeRepository.findByName(item.getName());
+            coffees.add(coffee.get());
+        });
+        order.setCoffees(coffees);
+        order.setType(order.getType());
+        order.setStatus(order.getStatus());
+
+        processOrderService.processOrder(order);
+        return this.orderRepository.save(order);
     }
 
 }
