@@ -31,8 +31,8 @@ public class OrderService {
         this.processOrderService = processOrderService;
     }
 
-    public Order findById(Long Id) {
-        Optional<Order> order = this.orderRepository.findById(Id);
+    public Order findById(Long id) {
+        Optional<Order> order = this.orderRepository.findById(id);
         return order.orElse(null);
     }
 

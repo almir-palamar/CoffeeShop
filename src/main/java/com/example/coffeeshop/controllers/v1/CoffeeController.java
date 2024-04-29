@@ -3,6 +3,8 @@ package com.example.coffeeshop.controllers.v1;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +26,8 @@ public class CoffeeController {
     }
 
     @GetMapping
-    public List<Coffee> getCoffees() {
-        return this.coffeeService.findAll();
+    public ResponseEntity<List<Coffee>> getCoffees() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.coffeeService.findAll());
     }
 
     @PostMapping

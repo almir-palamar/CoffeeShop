@@ -34,9 +34,9 @@ public class OrderController {
     }
 
     // this method is allowed only for admin role
-    @GetMapping("/{Id}")
-    public Order getOrder(@PathVariable Long Id) {
-        return this.orderService.findById(Id);
+    @GetMapping("/{id}")
+    public Order getOrder(@PathVariable Long id) {
+        return this.orderService.findById(id);
     }
 
 }

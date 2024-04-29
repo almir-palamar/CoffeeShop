@@ -64,6 +64,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/auth/register").permitAll()
                                 .requestMatchers("/api/auth/logout").permitAll()
                                 .requestMatchers("/api/order/**").permitAll()
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/coffee", "/api/coffee/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/coffee").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/coffee/**").hasAuthority("ADMIN")
