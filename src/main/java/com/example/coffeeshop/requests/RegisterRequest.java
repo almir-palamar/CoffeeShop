@@ -1,13 +1,28 @@
-package com.example.coffeeshop.dto;
+package com.example.coffeeshop.requests;
 
-public class LogInRequest {
+import jakarta.validation.constraints.NotEmpty;
 
+public class RegisterRequest {
+
+    @NotEmpty
+    private String name;
+    @NotEmpty
     private String username;
+    @NotEmpty
     private String password;
 
-    public LogInRequest(String username, String password) {
+    public RegisterRequest(String name, String username, String password) {
+        this.name = name;
         this.username = username;
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {

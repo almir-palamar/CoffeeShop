@@ -1,4 +1,4 @@
-package com.example.coffeeshop.controllers;
+package com.example.coffeeshop.controllers.v1;
 
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;

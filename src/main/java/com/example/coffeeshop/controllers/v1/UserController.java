@@ -1,4 +1,4 @@
-package com.example.coffeeshop.controllers;
+package com.example.coffeeshop.controllers.v1;
 
 import com.example.coffeeshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

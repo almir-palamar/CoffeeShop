@@ -1,13 +1,19 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.LogInRequest;
-import com.example.coffeeshop.dto.RegisterRequest;
+import com.example.coffeeshop.requests.LogInRequest;
+import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.AuthProvider;
+import java.security.Principal;
 
 @Service
 public class AuthService {
@@ -53,5 +59,13 @@ public class AuthService {
             throw new IllegalArgumentException();
         }
         return jwtService.generateToken(user);
+    }
+
+    public void logout(String jwtToken) {
+        jwtService.invalidate(jwtToken);
+    }
+
+    public User me() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

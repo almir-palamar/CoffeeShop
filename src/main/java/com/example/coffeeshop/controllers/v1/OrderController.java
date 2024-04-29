@@ -1,9 +1,13 @@
-package com.example.coffeeshop.controllers;
+package com.example.coffeeshop.controllers.v1;
 
 import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Order;
+import com.example.coffeeshop.requests.CreateOrderRequest;
 import com.example.coffeeshop.services.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,18 +21,19 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    // check this route with middleware
     @PostMapping("/to-go")
-    public Order orderToGo(@RequestBody Order order) {
-        order.setType(OrderEnum.Type.TO_GO);
-        return this.orderService.save(order);
+    public Order orderToGo(@Valid @RequestBody CreateOrderRequest orderRequest) {
+        orderRequest.setType(OrderEnum.Type.TO_GO);
+        return this.orderService.save(orderRequest);
     }
 
     @PostMapping("/web-ui")
-    public Order orderWebUI(@RequestBody Order order) {
-        return this.orderService.save(order);
+    public ResponseEntity<Order> orderWebUI(@Valid @RequestBody CreateOrderRequest orderRequest) {
+        Order order = this.orderService.save(orderRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
+    // this method is allowed only for admin role
     @GetMapping("/{Id}")
     public Order getOrder(@PathVariable Long Id) {
         return this.orderService.findById(Id);

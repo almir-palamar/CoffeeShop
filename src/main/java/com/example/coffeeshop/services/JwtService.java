@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -72,6 +73,11 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public void invalidate(String token) {
+        Claims claims = extractAllClaims(token);
+        claims.setExpiration(new Date(System.currentTimeMillis()));
     }
 
 }

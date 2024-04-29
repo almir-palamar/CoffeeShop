@@ -8,6 +8,7 @@ public class Coffee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @Column(unique = true, nullable = false)
     private String name;
     private Integer brewTime;
     private Integer caffeineGram;

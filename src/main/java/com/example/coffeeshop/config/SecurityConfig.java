@@ -1,6 +1,7 @@
 package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.filters.JwtAuthFilter;
+import com.example.coffeeshop.filters.ToGoPendingOrdersFilter;
 import com.example.coffeeshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,20 +21,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
 public class SecurityConfig {
 
-    // 1. why is @EnableMethodSecurity needed?
-
     private final JwtAuthFilter jwtAuthFilter;
+    private final ToGoPendingOrdersFilter toGoPendingOrdersFilter;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserService userService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          UserService userService,
+                          PasswordEncoder passwordEncoder,
+                          ToGoPendingOrdersFilter toGoPendingOrdersFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.toGoPendingOrdersFilter = toGoPendingOrdersFilter;
     }
 
     @Bean
@@ -57,8 +60,9 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeConfig ->
                         authorizeConfig
-                                .requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/user/**").permitAll()
+                                .requestMatchers("/api/auth/login").permitAll()
+                                .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/auth/logout").permitAll()
                                 .requestMatchers("/api/order/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/coffee", "/api/coffee/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/coffee").hasAuthority("ADMIN")
@@ -68,6 +72,7 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(toGoPendingOrdersFilter, JwtAuthFilter.class)
                 .build();
     }
 

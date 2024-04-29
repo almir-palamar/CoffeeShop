@@ -5,6 +5,7 @@ import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
+import com.example.coffeeshop.requests.CreateOrderRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -45,15 +46,14 @@ public class OrderService {
     }
 
     @Transactional
-    public Order save(@NonNull Order order) {
+    public Order save(@NonNull CreateOrderRequest orderRequest) {
         List<Coffee> coffees = new ArrayList<>();
-        order.getCoffees().forEach(item -> {
-            Optional<Coffee> coffee = this.coffeeRepository.findByName(item.getName());
+        orderRequest.getCoffees().forEach(item -> {
+            Optional<Coffee> coffee = this.coffeeRepository.findByName(item);
             coffees.add(coffee.get());
         });
-        order.setCoffees(coffees);
-        order.setType(order.getType());
-        order.setStatus(order.getStatus());
+        Order order = new Order(coffees);
+        order.setType(orderRequest.getType());
 
         processOrderService.processOrder(order);
         return this.orderRepository.save(order);

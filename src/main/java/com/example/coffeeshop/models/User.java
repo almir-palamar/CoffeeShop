@@ -41,10 +41,10 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "User => [" + name + ":" + username + ":" + role +"]";
-    }
+//    @Override
+//    public String toString() {
+//        return "User => [" + name + ":" + username + ":" + role +"]";
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
