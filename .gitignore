@@ -33,3 +33,5 @@ build/
 .vscode/
 
 mysql-backup/
+
+src/main/resources/application.properties
