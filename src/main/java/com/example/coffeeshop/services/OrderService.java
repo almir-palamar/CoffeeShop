@@ -59,4 +59,8 @@ public class OrderService {
         return this.orderRepository.save(order);
     }
 
+    public Integer countOrderByStatusIsAndType(OrderEnum.Status status, OrderEnum.Type type) {
+        return this.orderRepository.countOrderByStatusIsAndType(status, type);
+    }
+
 }
