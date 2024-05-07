@@ -19,9 +19,9 @@ public class CoffeeSeeder implements CommandLineRunner {
 
     private void seedCoffees() {
         List<Coffee> coffeeList = List.of(
-                new Coffee("Espresso", 35, 7, 1.00f),
-                new Coffee("Espresso doppio", 45, 14, 2.00f),
-                new Coffee("Cappuccino", 60, 7, 2.50f)
+                new Coffee("Espresso", 35, 7, 1.00f, "espresso.jpg"),
+                new Coffee("Espresso doppio", 45, 14, 2.00f, "espresso_doppio.jpg"),
+                new Coffee("Cappuccino", 60, 7, 2.50f, "cappuccino.jpg")
         );
         this.coffeeRepository.saveAll(coffeeList);
     }

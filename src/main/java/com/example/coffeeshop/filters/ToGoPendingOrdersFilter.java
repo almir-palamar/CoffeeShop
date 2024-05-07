@@ -1,7 +1,6 @@
 package com.example.coffeeshop.filters;
 
 import com.example.coffeeshop.enums.OrderEnum;
-import com.example.coffeeshop.mappers.ErrorResponseMapper;
 import com.example.coffeeshop.services.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -21,18 +20,14 @@ public class ToGoPendingOrdersFilter extends OncePerRequestFilter {
     private final OrderService orderService;
     private final HttpServletResponse httpServletResponse;
     private final ObjectMapper objectMapper;
-    private final ErrorResponseMapper errorResponseMapper;
 
     @Autowired
     public ToGoPendingOrdersFilter(OrderService orderService,
                                    HttpServletResponse httpServletResponse,
-                                   ObjectMapper objectMapper,
-                                   ErrorResponseMapper errorResponseMapper
-                                   ) {
+                                   ObjectMapper objectMapper) {
         this.orderService = orderService;
         this.httpServletResponse = httpServletResponse;
         this.objectMapper = objectMapper;
-        this.errorResponseMapper = errorResponseMapper;
     }
 
     @Override
@@ -47,7 +42,7 @@ public class ToGoPendingOrdersFilter extends OncePerRequestFilter {
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             httpServletResponse.setContentType("application/json");
             httpServletResponse.getWriter().write(
-                    objectMapper.writeValueAsString(errorResponseMapper.toJSON(httpServletResponse)));
+                    objectMapper.writeValueAsString("Login first"));
 
             return;
         }

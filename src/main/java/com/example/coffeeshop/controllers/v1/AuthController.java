@@ -1,11 +1,14 @@
 package com.example.coffeeshop.controllers.v1;
 
+import com.example.coffeeshop.dto.JwtTokenDTO;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,12 +23,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LogInRequest logInRequest) {
+    public JwtTokenDTO login(@RequestBody LogInRequest logInRequest) {
         return this.authService.login(logInRequest);
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody @Valid RegisterRequest registerRequest) {
+    public JwtTokenDTO register(@RequestBody @Valid RegisterRequest registerRequest) {
         return this.authService.register(registerRequest);
     }
 

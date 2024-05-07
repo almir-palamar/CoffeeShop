@@ -1,20 +1,18 @@
 package com.example.coffeeshop.dto;
 
-import jakarta.servlet.http.HttpServletResponseWrapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
-
-public class JSONResponse {
+public class JSONResponseWrapper {
 
     private Integer statusCode;
     private String message;
-    private Object result;
+    private Object data;
 
-    public JSONResponse(Integer statusCode, String message, Object result) {
+    public JSONResponseWrapper(Integer statusCode, String message, Object data) {
         this.statusCode = statusCode;
         this.message = message;
-        this.result = result;
+        this.data = data;
     }
+
+    public JSONResponseWrapper() {}
 
     public Integer getStatus() {
         return statusCode;
@@ -33,11 +31,11 @@ public class JSONResponse {
     }
 
     public Object getResult() {
-        return result;
+        return data;
     }
 
-    public void setResult(Object result) {
-        this.result = result;
+    public void setResult(Object data) {
+        this.data = data;
     }
 
 }

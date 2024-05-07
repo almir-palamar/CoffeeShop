@@ -1,6 +1,7 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 public class Coffee {
@@ -13,12 +14,14 @@ public class Coffee {
     private Integer brewTime;
     private Integer caffeineGram;
     private Float price;
+    private String imagePath;
 
-    public Coffee(String name, Integer brewTime, Integer caffeineGram, Float price) {
+    public Coffee(String name, Integer brewTime, Integer caffeineGram, Float price, String imagePath) {
         this.name = name;
         this.brewTime = brewTime;
         this.caffeineGram = caffeineGram;
         this.price = price;
+        this.imagePath = imagePath;
     }
 
     public Coffee() {}
@@ -53,6 +56,14 @@ public class Coffee {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override

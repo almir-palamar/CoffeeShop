@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
@@ -67,7 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api//v1/auth/logout").permitAll()
                                 .requestMatchers("/api/v1/order/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/coffee", "/api/v1/coffee/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/coffee").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/coffee/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/coffee/**").hasAuthority("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/coffee/**").hasAuthority("ADMIN")
                                 .anyRequest().authenticated()

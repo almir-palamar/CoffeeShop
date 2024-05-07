@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.dto.JwtTokenDTO;
 import com.example.coffeeshop.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +30,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public JwtTokenDTO generateToken(UserDetails userDetails) {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities());
         return generateToken(claims, userDetails);
@@ -45,8 +46,8 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts
+    private JwtTokenDTO generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        String jwtToken = Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
@@ -54,6 +55,9 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+
+        return new JwtTokenDTO(jwtToken);
+
     }
 
     private boolean isTokenExpired(String token) {

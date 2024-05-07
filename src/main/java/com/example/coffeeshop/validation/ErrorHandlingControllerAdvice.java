@@ -1,29 +1,26 @@
 package com.example.coffeeshop.validation;
 
-import com.example.coffeeshop.dto.JSONResponse;
 import com.example.coffeeshop.exceptions.MoreThan5PendingOrdersToGoException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class ErrorHandlingControllerAdvice implements ResponseBodyAdvice<Object> {
+public class ErrorHandlingControllerAdvice {
 
     /**
      * MethodArgumentNotValidException -> @RequestBody ; class -> / ; method -> @Valid
@@ -62,6 +59,10 @@ public class ErrorHandlingControllerAdvice implements ResponseBodyAdvice<Object>
         return new ValidationErrorResponse(violations, "Error", HttpStatus.BAD_REQUEST);
     }
 
+    /*
+    * this exception is throws in Filter, so it cannot be caught with this handler
+    * */
+
     @ExceptionHandler(MoreThan5PendingOrdersToGoException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
@@ -73,27 +74,16 @@ public class ErrorHandlingControllerAdvice implements ResponseBodyAdvice<Object>
         return new ValidationErrorResponse(violations, "Error", HttpStatus.BAD_REQUEST);
     }
 
-    @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ResponseEntity<Object> handleResponseEntityException(Exception ex, WebRequest request) {
+//        return new ResponseEntity<>("An error occurred: " +  ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public String handleHttpClientErrorException(AccessDeniedException ex) {
+        return "You are not authorized for this action!";
     }
 
-    @Override
-    @ResponseStatus(HttpStatus.OK)
-    public Object beforeBodyWrite(Object body,
-                                  MethodParameter returnType,
-                                  MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
-                                  ServerHttpRequest request,
-                                  ServerHttpResponse response) {
-
-        JSONResponse jsonResponse = new JSONResponse(
-          200,
-          "Success",
-          body
-        );
-
-        return jsonResponse;
-
-    }
 }

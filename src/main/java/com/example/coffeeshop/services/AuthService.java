@@ -1,9 +1,12 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.dto.JwtTokenDTO;
 import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -39,7 +42,7 @@ public class AuthService {
         this.emailService = emailService;
     }
 
-    public String register(RegisterRequest registerRequest) {
+    public JwtTokenDTO register(RegisterRequest registerRequest) {
         User user = new User(
                 registerRequest.getName(),
                 registerRequest.getUsername(),
@@ -51,7 +54,7 @@ public class AuthService {
         return jwtService.generateToken(user);
     }
 
-    public String login(LogInRequest logInRequest) {
+    public JwtTokenDTO login(LogInRequest logInRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(logInRequest.getUsername(), logInRequest.getPassword()));
         User user = userRepository.findByUsername(logInRequest.getUsername());

@@ -1,11 +1,15 @@
 package com.example.coffeeshop.controllers.v1;
 
+import com.example.coffeeshop.dto.CoffeeDTO;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,8 +35,11 @@ public class CoffeeController {
     }
 
     @PostMapping
-    public Coffee create(@RequestBody Coffee coffee) {
-        return this.coffeeService.save(coffee);
+    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    public Coffee create(@Valid
+                         @RequestPart CoffeeDTO coffeeDTO,
+                         @RequestParam("image") MultipartFile image) {
+        return this.coffeeService.save(coffeeDTO, image);
     }
 
     @PutMapping("/{id}")
