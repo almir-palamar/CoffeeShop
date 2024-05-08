@@ -2,6 +2,7 @@ package com.example.coffeeshop.filters;
 
 import com.example.coffeeshop.services.JwtService;
 import com.example.coffeeshop.services.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -38,26 +40,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String jwtToken;
         final String username;
 
-        if (!StringUtils.hasLength(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
+        try {
+
+            if (!StringUtils.hasLength(authHeader) || !StringUtils.startsWithIgnoreCase(authHeader, "Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            jwtToken = authHeader.substring(7);
+            username = jwtService.extractUsername(jwtToken);
+
+            if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities()
+                );
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                securityContext.setAuthentication(authToken);
+                SecurityContextHolder.setContext(securityContext);
+            }
             filterChain.doFilter(request, response);
-            return;
+
+        } catch (ExpiredJwtException e) {
+            response.setStatus(401);
+            response.getWriter().write("Your session has expired. Please login!");
+        } catch (AccessDeniedException ex) {
+            response.setStatus(401);
+            response.getWriter().write("Unauthorized. Please login!");
         }
 
-        jwtToken = authHeader.substring(7);
-        username = jwtService.extractUsername(jwtToken);
 
-        if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
-            );
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            securityContext.setAuthentication(authToken);
-            SecurityContextHolder.setContext(securityContext);
-        }
-
-        filterChain.doFilter(request, response);
     }
 
 

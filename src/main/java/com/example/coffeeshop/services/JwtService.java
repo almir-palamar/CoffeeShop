@@ -1,8 +1,8 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.JwtTokenDTO;
-import com.example.coffeeshop.models.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -65,7 +65,7 @@ public class JwtService {
         return claims.getExpiration().before(new Date());
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extractAllClaims(String token) throws ExpiredJwtException{
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())

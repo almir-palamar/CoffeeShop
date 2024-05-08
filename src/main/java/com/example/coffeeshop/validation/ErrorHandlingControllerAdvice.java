@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
@@ -74,16 +72,21 @@ public class ErrorHandlingControllerAdvice {
         return new ValidationErrorResponse(violations, "Error", HttpStatus.BAD_REQUEST);
     }
 
+    /*
+    * None of the exceptions below is not getting caught
+    */
+
 //    @ExceptionHandler(Exception.class)
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 //    public ResponseEntity<Object> handleResponseEntityException(Exception ex, WebRequest request) {
 //        return new ResponseEntity<>("An error occurred: " +  ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 //    }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String handleHttpClientErrorException(AccessDeniedException ex) {
-        return "You are not authorized for this action!";
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    public String handleAccessDeniedException(AccessDeniedException ex) {
+//        return "You are not authorized for this action!";
+//    }
+
 
 }

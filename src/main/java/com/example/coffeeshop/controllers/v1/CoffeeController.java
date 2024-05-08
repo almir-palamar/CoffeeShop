@@ -35,11 +35,10 @@ public class CoffeeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('admin')")
     public Coffee create(@Valid
-                         @RequestPart CoffeeDTO coffeeDTO,
-                         @RequestParam("image") MultipartFile image) {
-        return this.coffeeService.save(coffeeDTO, image);
+                         @RequestBody CoffeeDTO coffeeDTO) {
+        return this.coffeeService.save(coffeeDTO, null);
     }
 
     @PutMapping("/{id}")
