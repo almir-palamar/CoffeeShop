@@ -1,6 +1,7 @@
 package com.example.coffeeshop.controllers.v1;
 
-import com.example.coffeeshop.dto.CoffeeDTO;
+import com.example.coffeeshop.dto.coffee.CoffeeRequest;
+import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
 import jakarta.validation.Valid;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,7 +25,8 @@ public class CoffeeController {
     }
 
     @GetMapping("/{id}")
-    public Coffee getCoffee(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Coffee getCoffee(@PathVariable Long id) throws EntityNotFoundException {
         return this.coffeeService.findById(id);
     }
 
@@ -37,8 +38,8 @@ public class CoffeeController {
     @PostMapping
     @PreAuthorize("hasRole('admin')")
     public Coffee create(@Valid
-                         @RequestBody CoffeeDTO coffeeDTO) {
-        return this.coffeeService.save(coffeeDTO, null);
+                         @RequestBody CoffeeRequest coffeeRequest) {
+        return this.coffeeService.save(coffeeRequest, null);
     }
 
     @PutMapping("/{id}")
