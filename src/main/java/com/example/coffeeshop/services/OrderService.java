@@ -20,15 +20,12 @@ public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
-    private final ProcessOrderService processOrderService;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
-                        CoffeeRepository coffeeRepository,
-                        ProcessOrderService processOrderService) {
+                        CoffeeRepository coffeeRepository) {
         this.orderRepository = orderRepository;
         this.coffeeRepository = coffeeRepository;
-        this.processOrderService = processOrderService;
     }
 
     public Order findById(Long id) {
@@ -55,7 +52,7 @@ public class OrderService {
         Order order = new Order(coffees);
         order.setType(orderRequest.getType());
 
-        processOrderService.processOrder(order);
+        //TODO: Add processing order logic using websockets
         return this.orderRepository.save(order);
     }
 
