@@ -1,9 +1,9 @@
-package com.example.coffeeshop.dto;
+package com.example.coffeeshop.dto.coffee;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class CoffeeDTO {
+public class CoffeeRequest {
 
     @NotEmpty
     private String name;
@@ -14,16 +14,16 @@ public class CoffeeDTO {
     @NotNull
     private Float price;
 
-    public CoffeeDTO(String name, Integer brewTime, Integer caffeineGram, Float price) {
+    public CoffeeRequest(String name, Integer brewTime, Integer caffeineGram, Float price) {
         this.name = name;
         this.brewTime = brewTime;
         this.caffeineGram = caffeineGram;
         this.price = price;
     }
 
-    public CoffeeDTO() {}
+    public CoffeeRequest() {}
 
-    public CoffeeDTO(String name) {
+    public CoffeeRequest(String name) {
         this.name = name;
     }
 

@@ -1,6 +1,8 @@
-package com.example.coffeeshop.validation;
+package com.example.coffeeshop.exceptions;
 
-import com.example.coffeeshop.exceptions.MoreThan5PendingOrdersToGoException;
+import com.example.coffeeshop.response.ResponseBodyDTO;
+import com.example.coffeeshop.validation.ValidationErrorResponse;
+import com.example.coffeeshop.validation.Violation;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -11,14 +13,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 
-import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class ErrorHandlingControllerAdvice {
+public class ExceptionHandlingControllerAdvice {
 
     /**
      * MethodArgumentNotValidException -> @RequestBody ; class -> / ; method -> @Valid
@@ -88,5 +88,10 @@ public class ErrorHandlingControllerAdvice {
 //        return "You are not authorized for this action!";
 //    }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ResponseBodyDTO> handleEntityNotFoundException(EntityNotFoundException ex) {
+        ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBodyDTO);
+    }
 
 }

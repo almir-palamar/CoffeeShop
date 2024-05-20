@@ -1,6 +1,7 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.CoffeeDTO;
+import com.example.coffeeshop.dto.coffee.CoffeeRequest;
+import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,29 +29,29 @@ public class CoffeeService {
         return this.coffeeRepository.findByName(name);
     }
 
-    public Coffee findById(Long id) {
-        Optional<Coffee> coffee = this.coffeeRepository.findById(id);
-        return coffee.orElse(null);
+    public Coffee findById(Long id) throws EntityNotFoundException {
+        Coffee coffee = this.coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return coffee;
     }
 
     public List<Coffee> findAll() {
         return this.coffeeRepository.findAll();
     }
 
-    public Coffee save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
+    public Coffee save(CoffeeRequest coffeeRequest, MultipartFile imageFile) {
         try {
             String imageName = "no_image.jpg";
             if (imageFile != null && !imageFile.isEmpty()) {
                 String imageFileExtension = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
-                imageName = UUID.randomUUID() + "_" + coffeeDTO.getName() + imageFileExtension;
+                imageName = UUID.randomUUID() + "_" + coffeeRequest.getName() + imageFileExtension;
                 fileUploadService.storeFile(imageName, imageFile);
             }
 
             Coffee coffee = new Coffee(
-                    coffeeDTO.getName(),
-                    coffeeDTO.getBrewTime(),
-                    coffeeDTO.getCaffeineGram(),
-                    coffeeDTO.getPrice(),
+                    coffeeRequest.getName(),
+                    coffeeRequest.getBrewTime(),
+                    coffeeRequest.getCaffeineGram(),
+                    coffeeRequest.getPrice(),
                     imageName
             );
 
