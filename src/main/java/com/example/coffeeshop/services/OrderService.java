@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.app.OrderManager;
 import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +22,14 @@ public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
+    private final OrderManager orderManager;
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
-                        CoffeeRepository coffeeRepository) {
+                        CoffeeRepository coffeeRepository, OrderManager orderManager) {
         this.orderRepository = orderRepository;
         this.coffeeRepository = coffeeRepository;
+        this.orderManager = orderManager;
     }
 
     public Order findById(Long id) {
@@ -52,7 +56,8 @@ public class OrderService {
         Order order = new Order(coffees);
         order.setType(orderRequest.getType());
 
-        //TODO: Add processing order logic using websockets
+        orderManager.addOrder(order);
+
         return this.orderRepository.save(order);
     }
 
