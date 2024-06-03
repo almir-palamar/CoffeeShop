@@ -1,4 +1,4 @@
-package com.example.coffeeshop.crons;
+package com.example.coffeeshop.cron;
 
 import com.example.coffeeshop.services.EspressoMachineService;
 import org.springframework.scheduling.annotation.EnableScheduling;

@@ -56,7 +56,7 @@ public class OrderService {
         Order order = new Order(coffees);
         order.setType(orderRequest.getType());
 
-        orderManager.addOrder(order);
+//        orderManager.addOrder(order);
 
         return this.orderRepository.save(order);
     }

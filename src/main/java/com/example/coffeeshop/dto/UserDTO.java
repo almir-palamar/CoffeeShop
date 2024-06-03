@@ -1,7 +1,7 @@
 package com.example.coffeeshop.dto;
 
-public class UserDTO {
-
-
-
-}
+public record UserDTO(
+    String fullName,
+    String username,
+    String email
+) {}

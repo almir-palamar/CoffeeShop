@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.dto.UserDTO;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -31,6 +34,16 @@ public class UserService {
                 return userRepository.findByUsername(username);
             }
         };
+    }
+
+    public List<UserDTO> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserDTO(
+                        user.getFirstName() + " " + user.getLastName(),
+                        user.getUsername(),
+                        user.getLastName()
+                )).toList();
     }
 
     public User save(User newUser) {

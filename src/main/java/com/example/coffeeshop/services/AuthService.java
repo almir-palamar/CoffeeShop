@@ -5,18 +5,11 @@ import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.AuthProvider;
-import java.security.Principal;
 
 @Service
 public class AuthService {
@@ -44,8 +37,10 @@ public class AuthService {
 
     public JwtTokenDTO register(RegisterRequest registerRequest) {
         User user = new User(
-                registerRequest.getName(),
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
                 registerRequest.getUsername(),
+                registerRequest.getEmail(),
                 passwordEncoder.encode(registerRequest.getPassword()),
                 null
         );

@@ -24,8 +24,8 @@ public class UserSeeder implements CommandLineRunner {
 
     public void seedUsers() {
         List<User> users = List.of(
-                new User("admin", "admin", passwordEncoder.encode("admin"), RoleEnum.ADMIN),
-                new User("user", "user", passwordEncoder.encode("user"), RoleEnum.USER)
+                new User("admin", "admin", "admin", "admin@gmail.com", passwordEncoder.encode("admin"), RoleEnum.ADMIN),
+                new User("user", "user", "user", "user@gmail.com", passwordEncoder.encode("user"), RoleEnum.USER)
         );
         this.userRepository.saveAll(users);
     }

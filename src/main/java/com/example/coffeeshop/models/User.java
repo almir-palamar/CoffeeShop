@@ -17,34 +17,50 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private String name;
+    private String firstName;
+    private String lastName;
     @Column(unique = true)
     private String username;
+    @Column(unique = true)
+    private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    public User(String name, String username, String password, @Nullable RoleEnum role) {
-        this.name = name;
+    public User(String firstName, String lastName, String username, String email, String password, @Nullable RoleEnum role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.role = role != null ? role : RoleEnum.USER;
     }
 
     public User() {}
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-//    @Override
-//    public String toString() {
-//        return "User => [" + name + ":" + username + ":" + role +"]";
-//    }
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
