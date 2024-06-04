@@ -1,6 +1,9 @@
 package com.example.coffeeshop.dto;
 
-public class OrderDTO {
+import com.example.coffeeshop.models.Order;
 
+import java.util.function.Function;
 
-}
+public record OrderDTO(
+    Long orderNo
+) {}

@@ -1,4 +1,4 @@
-package com.example.coffeeshop.response;
+package com.example.coffeeshop.dto;
 
 import org.springframework.http.HttpStatus;
 

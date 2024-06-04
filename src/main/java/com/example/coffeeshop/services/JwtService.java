@@ -57,7 +57,6 @@ public class JwtService {
                 .compact();
 
         return new JwtTokenDTO(jwtToken);
-
     }
 
     private boolean isTokenExpired(String token) {
@@ -79,9 +78,9 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public void invalidate(String token) {
-        Claims claims = extractAllClaims(token);
-        claims.setExpiration(new Date(System.currentTimeMillis()));
+    public void invalidateToken(String token) {
+        Claims claims = extractAllClaims(token.replace("Bearer ", ""));
+        claims.setExpiration(new Date());
     }
 
 }

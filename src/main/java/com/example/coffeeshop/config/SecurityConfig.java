@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,16 +29,19 @@ public class SecurityConfig {
     private final ToGoPendingOrdersFilter toGoPendingOrdersFilter;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthEntryPoint authEntryPoint;
 
     @Autowired
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
                           UserService userService,
                           PasswordEncoder passwordEncoder,
-                          ToGoPendingOrdersFilter toGoPendingOrdersFilter) {
+                          ToGoPendingOrdersFilter toGoPendingOrdersFilter,
+                          AuthEntryPoint authEntryPoint) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.toGoPendingOrdersFilter = toGoPendingOrdersFilter;
+        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -54,11 +58,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPoint authEntryPoint) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(authorizeConfig ->
                         authorizeConfig
                                 .requestMatchers("/error").permitAll()

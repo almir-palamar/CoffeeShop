@@ -1,6 +1,6 @@
 package com.example.coffeeshop.exceptions;
 
-import com.example.coffeeshop.response.ResponseBodyDTO;
+import com.example.coffeeshop.dto.ResponseBodyDTO;
 import com.example.coffeeshop.validation.ValidationErrorResponse;
 import com.example.coffeeshop.validation.Violation;
 import jakarta.validation.ConstraintViolation;
@@ -92,6 +92,12 @@ public class ExceptionHandlingControllerAdvice {
     public ResponseEntity<ResponseBodyDTO> handleEntityNotFoundException(EntityNotFoundException ex) {
         ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBodyDTO);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseBodyDTO> handleBadCredentialsException(BadCredentialsException ex) {
+        ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBodyDTO);
     }
 
 }

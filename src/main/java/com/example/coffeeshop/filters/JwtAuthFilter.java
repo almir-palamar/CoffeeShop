@@ -64,10 +64,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         } catch (ExpiredJwtException e) {
             response.setStatus(401);
-            response.getWriter().write("Your session has expired. Please login!");
+            response.getWriter().write("Unauthenticated!");
         } catch (AccessDeniedException ex) {
-            response.setStatus(401);
-            response.getWriter().write("Unauthorized. Please login!");
+            response.setStatus(403);
+            response.getWriter().write("Unauthorized!");
         }
 
 

@@ -5,6 +5,7 @@ import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
+    @Autowired
     public AuthService(UserRepository userRepository,
                        UserService userService,
                        PasswordEncoder passwordEncoder,
@@ -60,7 +62,7 @@ public class AuthService {
     }
 
     public void logout(String jwtToken) {
-        jwtService.invalidate(jwtToken);
+        jwtService.invalidateToken(jwtToken);
     }
 
     public User me() {
