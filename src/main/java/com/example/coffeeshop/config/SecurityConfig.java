@@ -29,19 +29,16 @@ public class SecurityConfig {
     private final ToGoPendingOrdersFilter toGoPendingOrdersFilter;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthEntryPoint authEntryPoint;
 
     @Autowired
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
                           UserService userService,
                           PasswordEncoder passwordEncoder,
-                          ToGoPendingOrdersFilter toGoPendingOrdersFilter,
-                          AuthEntryPoint authEntryPoint) {
+                          ToGoPendingOrdersFilter toGoPendingOrdersFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.toGoPendingOrdersFilter = toGoPendingOrdersFilter;
-        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -58,14 +55,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPoint authEntryPoint) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .authorizeHttpRequests(authorizeConfig ->
                         authorizeConfig
                                 .requestMatchers("/error").permitAll()

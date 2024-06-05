@@ -1,9 +1,11 @@
 package com.example.coffeeshop.exceptions;
 
-public class MoreThan5PendingOrdersToGoException extends RuntimeException {
+import org.springframework.http.HttpStatus;
 
-    public MoreThan5PendingOrdersToGoException(String message) {
-        super(message);
+public class MoreThan5PendingOrdersToGoException extends AppGeneralException {
+
+    public MoreThan5PendingOrdersToGoException() {
+        super(HttpStatus.BAD_REQUEST, "More than 5 pending orders to go");
     }
 
 }

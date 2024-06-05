@@ -1,6 +1,7 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.JwtTokenDTO;
+import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
@@ -9,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -52,13 +56,16 @@ public class AuthService {
     }
 
     public JwtTokenDTO login(LogInRequest logInRequest) {
+        Optional<User> user = userRepository.findByUsername(logInRequest.getUsername());
+        if (user.isEmpty()) {
+            throw new UnauthorizedException("Username not valid.");
+        }
+        if (!passwordEncoder.matches(logInRequest.getPassword(), user.get().getPassword())) {
+            throw new UnauthorizedException("Password not valid.");
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(logInRequest.getUsername(), logInRequest.getPassword()));
-        User user = userRepository.findByUsername(logInRequest.getUsername());
-        if (user == null) {
-            throw new IllegalArgumentException();
-        }
-        return jwtService.generateToken(user);
+        return jwtService.generateToken(user.get());
     }
 
     public void logout(String jwtToken) {
