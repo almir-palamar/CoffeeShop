@@ -33,7 +33,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
-    // this method is allowed only for admin role
     @GetMapping("/{id}")
     public Order getOrder(@PathVariable Long id) {
         return this.orderService.findById(id);

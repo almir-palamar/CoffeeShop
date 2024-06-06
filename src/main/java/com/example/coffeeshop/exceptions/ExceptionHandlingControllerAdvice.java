@@ -6,9 +6,9 @@ import com.example.coffeeshop.validation.Violation;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-@Qualifier("handlerExceptionResolver")
 public class ExceptionHandlingControllerAdvice {
 
     /**
@@ -74,7 +73,7 @@ public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseBodyDTO> handleOtherExceptions(Exception ex) {
-        ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage() , null);
+        ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage() , ex.getStackTrace());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBodyDTO);
     }
 
@@ -86,7 +85,13 @@ public class ExceptionHandlingControllerAdvice {
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseBodyDTO> handleJwtExpiredException(ExpiredJwtException ex) {
         ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage() , null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBodyDTO);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBodyDTO);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ResponseBodyDTO> handleAccessDeniedException(AccessDeniedException ex) {
+        ResponseBodyDTO responseBodyDTO = new ResponseBodyDTO(HttpStatus.UNAUTHORIZED, "You are not authorized for requested action." , null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBodyDTO);
     }
 
 }

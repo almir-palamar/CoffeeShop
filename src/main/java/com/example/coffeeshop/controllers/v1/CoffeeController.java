@@ -36,7 +36,7 @@ public class CoffeeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Coffee create(@Valid
                          @RequestBody CoffeeRequest coffeeRequest) {
         return this.coffeeService.save(coffeeRequest, null);
@@ -48,6 +48,7 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Coffee delete(@PathVariable Long id) {
         return this.coffeeService.deleteById(id);
     }
