@@ -1,4 +1,4 @@
-package com.example.coffeeshop.dto;
+package com.example.coffeeshop.dto.user;
 
 import java.util.List;
 

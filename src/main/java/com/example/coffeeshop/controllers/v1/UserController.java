@@ -1,7 +1,6 @@
 package com.example.coffeeshop.controllers.v1;
 
-import com.example.coffeeshop.dto.UserDTO;
-import com.example.coffeeshop.models.User;
+import com.example.coffeeshop.dto.user.UserDTO;
 import com.example.coffeeshop.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

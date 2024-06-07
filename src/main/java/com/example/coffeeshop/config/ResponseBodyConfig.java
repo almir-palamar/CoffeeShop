@@ -1,7 +1,8 @@
 package com.example.coffeeshop.config;
 
-import com.example.coffeeshop.dto.ResponseBodyDTO;
+import com.example.coffeeshop.dto.ResponseDTO;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -9,6 +10,11 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+/*
+ * Currently unnecessary configuration as everything is being handled
+ * in @ControllerAdvice ExceptionHandlingControllerAdvice
+ */
 
 @ControllerAdvice
 public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
@@ -26,8 +32,12 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
                                   @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
 
-        if (body instanceof ResponseBodyDTO) {
-            return body;
+        if (!(body instanceof ResponseDTO)) {
+            return new ResponseDTO(
+                    HttpStatus.OK,
+                    "Success",
+                    body
+            );
         }
 
         return body;

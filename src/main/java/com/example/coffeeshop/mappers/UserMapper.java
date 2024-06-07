@@ -1,6 +1,6 @@
 package com.example.coffeeshop.mappers;
 
-import com.example.coffeeshop.dto.UserDTO;
+import com.example.coffeeshop.dto.user.UserDTO;
 import com.example.coffeeshop.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;

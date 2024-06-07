@@ -1,17 +1,17 @@
 package com.example.coffeeshop.exceptions;
 
-import com.example.coffeeshop.dto.ResponseBodyDTO;
+import com.example.coffeeshop.dto.ResponseDTO;
 import org.springframework.http.HttpStatus;
 
 public class AppGeneralException extends RuntimeException{
 
-    private final ResponseBodyDTO responseBodyDTO;
+    private final ResponseDTO responseDTO;
 
     public AppGeneralException(HttpStatus httpStatus, String message){
-        this.responseBodyDTO = new ResponseBodyDTO(httpStatus, message);
+        this.responseDTO = new ResponseDTO(httpStatus, message);
     }
 
-    public ResponseBodyDTO getResponseBodyDTO() {
-        return responseBodyDTO;
+    public ResponseDTO getResponseBodyDTO() {
+        return responseDTO;
     }
 }

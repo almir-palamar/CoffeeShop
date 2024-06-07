@@ -1,6 +1,6 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.JwtTokenDTO;
+import com.example.coffeeshop.dto.jwt.JwtTokenDTO;
 import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.requests.LogInRequest;
 import com.example.coffeeshop.requests.RegisterRequest;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

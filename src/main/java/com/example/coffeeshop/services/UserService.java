@@ -1,12 +1,11 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.UserDTO;
+import com.example.coffeeshop.dto.user.UserDTO;
 import com.example.coffeeshop.mappers.UserMapper;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

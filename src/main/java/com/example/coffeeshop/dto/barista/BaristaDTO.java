@@ -1,4 +1,4 @@
-package com.example.coffeeshop.dto;
+package com.example.coffeeshop.dto.barista;
 
 public class BaristaDTO {
 

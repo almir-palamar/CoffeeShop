@@ -1,6 +1,6 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.JwtTokenDTO;
+import com.example.coffeeshop.dto.jwt.JwtTokenDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

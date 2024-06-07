@@ -1,4 +1,4 @@
-package com.example.coffeeshop.dto;
+package com.example.coffeeshop.dto.espressoMachine;
 
 public record EspressoMachineDTO (
         String brand
