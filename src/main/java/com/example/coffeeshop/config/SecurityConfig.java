@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/register").permitAll()
-                                .requestMatchers("/api//v1/auth/logout").permitAll()
+                                .requestMatchers("/api/v1/auth/logout").permitAll()
                                 .requestMatchers("/api/v1/order/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/coffee", "/api/v1/coffee/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/coffee/**").permitAll()
