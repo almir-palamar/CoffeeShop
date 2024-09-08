@@ -31,23 +31,27 @@ public class CoffeeController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Coffee>> getCoffees() {
         return ResponseEntity.status(HttpStatus.OK).body(this.coffeeService.findAll());
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Coffee create(@Valid
                          @RequestBody CoffeeRequest coffeeRequest) {
         return this.coffeeService.save(coffeeRequest, null);
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Coffee update(@RequestBody Coffee coffee, @PathVariable Long id) {
         return this.coffeeService.update(coffee, id);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
     public Coffee delete(@PathVariable Long id) {
         return this.coffeeService.deleteById(id);
