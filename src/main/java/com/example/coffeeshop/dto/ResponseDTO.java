@@ -24,6 +24,13 @@ public class ResponseDTO {
         this.data = data;
     }
 
+    public ResponseDTO(HttpStatus status, String message, Object data, Boolean error) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+        this.error = error;
+    }
+
     public HttpStatus getStatus() {
         return status;
     }

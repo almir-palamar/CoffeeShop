@@ -1,6 +1,9 @@
 package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.dto.ResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +19,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * in @ControllerAdvice ExceptionHandlingControllerAdvice
  */
 
+/*
+ * Like this Config class is invoked when the response is going towards user.
+ * Response gets in this class before going back to appropriate controller
+ * And If controller expects to return the String it could not do so
+ * Because this part would return ResponseDTO objects' instance
+ */
+
 @ControllerAdvice
 public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
+
+    private final MessageSource messageSource;
+
+    public ResponseBodyConfig(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @Override
     public boolean supports(@NonNull MethodParameter returnType, @NonNull Class<? extends HttpMessageConverter<?>> converterType) {
@@ -35,8 +51,15 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
         if (!(body instanceof ResponseDTO)) {
             return new ResponseDTO(
                     HttpStatus.OK,
-                    "Success",
+                    messageSource.getMessage("success", null, LocaleContextHolder.getLocale()),
                     body
+            );
+        } else {
+            ((ResponseDTO) body).setMessage(
+                    messageSource.getMessage(
+                            ((ResponseDTO) body).getMessage(),
+                            null,
+                            LocaleContextHolder.getLocale())
             );
         }
 

@@ -79,19 +79,19 @@ public class ExceptionHandlingControllerAdvice {
     }
 
     @ExceptionHandler(MoreThan5PendingOrdersToGoException.class)
-    public ResponseEntity<ResponseDTO> handleOtherExceptions(MoreThan5PendingOrdersToGoException ex) {
+    public ResponseEntity<ResponseDTO> handleMoreThan5PendingOrdersToGoException(MoreThan5PendingOrdersToGoException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getResponseBodyDTO());
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseDTO> handleJwtExpiredException(ExpiredJwtException ex) {
-        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage() , null);
+        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage() , null, true);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseDTO> handleAccessDeniedException(AccessDeniedException ex) {
-        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, "You are not authorized for requested action." , null);
+        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, "unauthorized_access" , null, true);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
     }
 

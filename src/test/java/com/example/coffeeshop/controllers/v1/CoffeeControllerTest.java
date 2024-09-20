@@ -15,11 +15,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,33 +59,37 @@ class CoffeeControllerTest {
     // some other classes such as Request
 
     @Test
+    @WithMockUser
     public void getCoffee() throws Exception {
 
         // Arrange
-        Coffee coffee = new Coffee("Espresso",
-                35,
-                7,
-                1.00f,
-                null);
-
-        User adminUser = new User("admin",
-                "admin",
-                "admin",
-                "admin@gmail.com",
-                passwordEncoder.encode("admin"),
-                RoleEnum.ADMIN);
+//        Coffee coffee = new Coffee("Espresso",
+//                35,
+//                7,
+//                1.00f,
+//                null);
+//
+//        User adminUser = new User("admin",
+//                "admin",
+//                "admin",
+//                "admin@gmail.com",
+//                passwordEncoder.encode("admin"),
+//                RoleEnum.ADMIN);
 
         // here should be an authentication for admin user
         // in order to save the coffee
 
         // Act
         // here should be mapped into coffee model
-        coffeeService.save(new CoffeeRequest(), null);
-        RequestBuilder request = MockMvcRequestBuilders.get("/coffee");
+//        coffeeService.save(new CoffeeRequest(), null);
+//        RequestBuilder request = MockMvcRequestBuilders.get("/coffee");
 
-        MvcResult result = mvc.perform(request)
+        MvcResult result = mvc.perform(get("/api/v1/coffee"))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        String responseContent = result.getResponse().getContentAsString();
+
 
     }
 }

@@ -30,8 +30,7 @@ public class CoffeeService {
     }
 
     public Coffee findById(Long id) throws EntityNotFoundException {
-        Coffee coffee = this.coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return coffee;
+        return this.coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Coffee> findAll() {

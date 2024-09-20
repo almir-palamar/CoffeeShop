@@ -1,8 +1,7 @@
-version: '4'
 services:
-  mysql-cs:
+  coffeeShop:
     image: mysql:8.3.0
-    container_name: mysql-cs
+    container_name: coffeeShop
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
