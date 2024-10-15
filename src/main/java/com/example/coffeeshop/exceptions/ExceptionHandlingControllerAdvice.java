@@ -1,6 +1,5 @@
 package com.example.coffeeshop.exceptions;
 
-import com.example.coffeeshop.dto.ErrorDTO;
 import com.example.coffeeshop.dto.ResponseDTO;
 import com.example.coffeeshop.validation.ValidationErrorResponse;
 import com.example.coffeeshop.validation.Violation;
@@ -62,19 +61,19 @@ public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ResponseDTO> handleEntityNotFoundException(EntityNotFoundException ex) {
-        ResponseDTO responseDTO = new ResponseDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null);
+        ResponseDTO responseDTO = new ResponseDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null, true);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorDTO> handleUnauthorizedException(UnauthorizedException ex) {
-        ErrorDTO ErrorDTO = new ErrorDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorDTO);
+    public ResponseEntity<ResponseDTO> handleUnauthorizedException(UnauthorizedException ex) {
+        ResponseDTO responseDTO = new ResponseDTO(ex.getResponseBodyDTO().getStatus(), ex.getResponseBodyDTO().getMessage() , null, true);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDTO> handleOtherExceptions(Exception ex) {
-        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage() , ex.getStackTrace());
+        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "error" , ex.getStackTrace());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
     }
 
@@ -85,7 +84,7 @@ public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ResponseDTO> handleJwtExpiredException(ExpiredJwtException ex) {
-        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, ex.getLocalizedMessage() , null, true);
+        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, "jwt_expired" , ex.getLocalizedMessage(), true);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
     }
 

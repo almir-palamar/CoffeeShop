@@ -1,7 +1,6 @@
 package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.dto.ResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
@@ -17,6 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 /*
  * Currently unnecessary configuration as everything is being handled
  * in @ControllerAdvice ExceptionHandlingControllerAdvice
+ *
+ * 15.10.2024 => This is something that is being called for formatting responses.
+ *
  */
 
 /*
@@ -47,22 +49,20 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
                                   @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
-
-        if (!(body instanceof ResponseDTO)) {
-            return new ResponseDTO(
-                    HttpStatus.OK,
-                    messageSource.getMessage("success", null, LocaleContextHolder.getLocale()),
-                    body
-            );
-        } else {
-            ((ResponseDTO) body).setMessage(
-                    messageSource.getMessage(
-                            ((ResponseDTO) body).getMessage(),
-                            null,
-                            LocaleContextHolder.getLocale())
-            );
-        }
-
+//        return formatResponse(body); with this swagger wont work
         return body;
+    }
+
+    private Object formatResponse(Object body) {
+        if (body instanceof ResponseDTO responseDTO) {
+            responseDTO.setMessage(
+                    messageSource.getMessage(responseDTO.getMessage(), null, LocaleContextHolder.getLocale()));
+            return responseDTO;
+        }
+        return new ResponseDTO(
+                HttpStatus.OK,
+                messageSource.getMessage("success", null, LocaleContextHolder.getLocale()),
+                body
+        );
     }
 }

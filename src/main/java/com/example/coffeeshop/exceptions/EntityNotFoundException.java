@@ -4,6 +4,6 @@ import org.springframework.http.HttpStatus;
 
 public class EntityNotFoundException extends AppGeneralException{
     public EntityNotFoundException(){
-        super(HttpStatus.NOT_FOUND, "Requested resource does not exist.");
+        super(HttpStatus.NOT_FOUND, "resource_not_found");
     }
 }
