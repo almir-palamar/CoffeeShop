@@ -1,5 +1,25 @@
 package com.example.coffeeshop.dto.order;
 
+import com.example.coffeeshop.enums.OrderEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
+
 public record OrderDTO(
-    Long orderNo
-) {}
+    @NotEmpty(message = "pick_at_least_one_coffee")
+    List<String> coffees,
+    @Enumerated(value = EnumType.STRING)
+    OrderEnum.Type type
+) {
+
+    /*I have added custom constructor, and using the default one
+    * because by nature records does not accept default values.
+    * They are also immutable.
+    * */
+
+    public OrderDTO(List<String> coffees) {
+        this(coffees, OrderEnum.Type.WEB_UI);
+    }
+}

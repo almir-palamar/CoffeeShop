@@ -1,9 +1,5 @@
 package com.example.coffeeshop.controllers.v1;
 
-import com.example.coffeeshop.dto.coffee.CoffeeRequest;
-import com.example.coffeeshop.enums.RoleEnum;
-import com.example.coffeeshop.models.Coffee;
-import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.services.CoffeeService;
 import com.example.coffeeshop.services.JwtService;
 import com.example.coffeeshop.services.OrderService;
@@ -19,8 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 

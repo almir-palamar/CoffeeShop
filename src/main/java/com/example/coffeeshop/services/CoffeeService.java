@@ -1,9 +1,11 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.coffee.CoffeeRequest;
+import com.example.coffeeshop.dto.coffee.CoffeeDTO;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ public class CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
     private final FileUploadService fileUploadService;
+    private Logger logger = LoggerFactory.getLogger(CoffeeService.class);
 
     @Autowired
     public CoffeeService(CoffeeRepository coffeeRepository, FileUploadService fileUploadService) {
@@ -30,6 +33,7 @@ public class CoffeeService {
     }
 
     public Coffee findById(Long id) throws EntityNotFoundException {
+        logger.error("EKKSEEEEEEEPSNNNNNNNNNN");
         return this.coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -37,25 +41,26 @@ public class CoffeeService {
         return this.coffeeRepository.findAll();
     }
 
-    public Coffee save(CoffeeRequest coffeeRequest, MultipartFile imageFile) {
+    public Coffee save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
         try {
             String imageName = "no_image.jpg";
             if (imageFile != null && !imageFile.isEmpty()) {
                 String imageFileExtension = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
-                imageName = UUID.randomUUID() + "_" + coffeeRequest.getName() + imageFileExtension;
+                imageName = UUID.randomUUID() + "_" + coffeeDTO.name() + imageFileExtension;
                 fileUploadService.storeFile(imageName, imageFile);
             }
 
             Coffee coffee = new Coffee(
-                    coffeeRequest.getName(),
-                    coffeeRequest.getBrewTime(),
-                    coffeeRequest.getCaffeineGram(),
-                    coffeeRequest.getPrice(),
+                    coffeeDTO.name(),
+                    coffeeDTO.brewTime(),
+                    coffeeDTO.caffeineGram(),
+                    coffeeDTO.price(),
                     imageName
             );
 
             return this.coffeeRepository.save(coffee);
         } catch (IOException e) {
+
             throw new RuntimeException(e);
         }
     }

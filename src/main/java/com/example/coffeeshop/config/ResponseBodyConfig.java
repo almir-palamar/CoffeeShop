@@ -49,8 +49,7 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
                                   @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
-//        return formatResponse(body); with this swagger wont work
-        return body;
+        return formatResponse(body); //with this swagger wont work
     }
 
     private Object formatResponse(Object body) {

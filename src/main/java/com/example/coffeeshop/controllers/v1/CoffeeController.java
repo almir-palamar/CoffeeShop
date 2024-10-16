@@ -1,6 +1,6 @@
 package com.example.coffeeshop.controllers.v1;
 
-import com.example.coffeeshop.dto.coffee.CoffeeRequest;
+import com.example.coffeeshop.dto.coffee.CoffeeDTO;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
@@ -40,8 +40,8 @@ public class CoffeeController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public Coffee create(@Valid
-                         @RequestBody CoffeeRequest coffeeRequest) {
-        return this.coffeeService.save(coffeeRequest, null);
+                         @RequestBody CoffeeDTO coffeeDTO) {
+        return this.coffeeService.save(coffeeDTO, null);
     }
 
     @PutMapping("/{id}")
