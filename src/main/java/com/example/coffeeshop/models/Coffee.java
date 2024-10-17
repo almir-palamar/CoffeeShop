@@ -1,14 +1,13 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 public class Coffee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @Column(unique = true, nullable = false)
     private String name;
     private Integer brewTime;

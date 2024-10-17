@@ -1,4 +1,4 @@
-package com.example.coffeeshop.dto.jwt;
+package com.example.coffeeshop.dto.auth;
 
 public record JwtTokenDTO(
         String accessToken

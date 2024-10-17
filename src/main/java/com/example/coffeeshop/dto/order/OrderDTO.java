@@ -12,14 +12,4 @@ public record OrderDTO(
     List<String> coffees,
     @Enumerated(value = EnumType.STRING)
     OrderEnum.Type type
-) {
-
-    /*I have added custom constructor, and using the default one
-    * because by nature records does not accept default values.
-    * They are also immutable.
-    * */
-
-    public OrderDTO(List<String> coffees) {
-        this(coffees, OrderEnum.Type.WEB_UI);
-    }
-}
+) { }

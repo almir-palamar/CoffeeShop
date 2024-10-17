@@ -1,10 +1,9 @@
 package com.example.coffeeshop.controllers.v1;
 
-import com.example.coffeeshop.dto.ResponseDTO;
-import com.example.coffeeshop.dto.jwt.JwtTokenDTO;
+import com.example.coffeeshop.dto.auth.JwtTokenDTO;
+import com.example.coffeeshop.dto.auth.LoginDTO;
+import com.example.coffeeshop.dto.auth.RegisterDTO;
 import com.example.coffeeshop.models.User;
-import com.example.coffeeshop.requests.LogInRequest;
-import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenDTO> login(@RequestBody LogInRequest logInRequest) {
-        return ResponseEntity.ok(authService.login(logInRequest));
+    public ResponseEntity<JwtTokenDTO> login(@RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(authService.login(loginDTO));
     }
 
     @PostMapping("/register")
-    public JwtTokenDTO register(@RequestBody @Valid RegisterRequest registerRequest) {
-        return this.authService.register(registerRequest);
+    public JwtTokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
+        return this.authService.register(registerDTO);
     }
 
     @GetMapping("/logout")

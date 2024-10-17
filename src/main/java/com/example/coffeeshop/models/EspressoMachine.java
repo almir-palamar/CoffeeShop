@@ -8,7 +8,7 @@ public class EspressoMachine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String brand;
     private Integer grinder;
     @JsonIgnore
@@ -25,7 +25,7 @@ public class EspressoMachine {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public String getBrand() {

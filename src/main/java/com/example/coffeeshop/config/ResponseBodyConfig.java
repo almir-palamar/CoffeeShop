@@ -1,6 +1,7 @@
 package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.dto.ResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
@@ -33,6 +34,10 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
 
     private final MessageSource messageSource;
 
+    /* As the class have only one constructor no need to @Autowire.
+     * When there is more than 1 constructor using @Autowire
+     * will tell Spring Boot which constructor to use for dependency injection
+     */
     public ResponseBodyConfig(MessageSource messageSource) {
         this.messageSource = messageSource;
     }

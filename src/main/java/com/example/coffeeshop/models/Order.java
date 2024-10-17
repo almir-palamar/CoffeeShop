@@ -12,7 +12,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @ManyToMany
     private List<Coffee> coffees;
     @ManyToOne
@@ -20,20 +20,21 @@ public class Order {
     @JoinColumn(name = "barista_id")
     private Barista barista = null;
     @Enumerated(EnumType.STRING)
-    private OrderEnum.Type type = OrderEnum.Type.WEB_UI;
+    private OrderEnum.Type type;
     @Enumerated(EnumType.STRING)
     private OrderEnum.Status status = OrderEnum.Status.PENDING;
 
-    public Order(List<Coffee> coffees) {
+    public Order(List<Coffee> coffees, OrderEnum.Type type) {
         this.coffees = coffees;
+        this.type = type;
     }
 
     public Order() {
     }
 
     public Long getId() {
-        return Id;
-    };
+        return id;
+    }
 
     public List<Coffee> getCoffees() {
         return coffees;
@@ -70,7 +71,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + Id +
+                "id=" + id +
                 ", coffees=" + coffees +
                 ", barista=" + barista +
                 ", status=" + status +

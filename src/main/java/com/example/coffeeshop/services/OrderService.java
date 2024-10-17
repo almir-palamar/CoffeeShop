@@ -1,12 +1,12 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.app.OrderManager;
+import com.example.coffeeshop.dto.order.OrderDTO;
 import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
-import com.example.coffeeshop.requests.CreateOrderRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -47,14 +47,13 @@ public class OrderService {
     }
 
     @Transactional
-    public Order save(@NonNull CreateOrderRequest orderRequest) {
+    public Order save(@NonNull OrderDTO orderDTO) {
         List<Coffee> coffees = new ArrayList<>();
-        orderRequest.getCoffees().forEach(item -> {
+        orderDTO.coffees().forEach(item -> {
             Optional<Coffee> coffee = this.coffeeRepository.findByName(item);
             coffees.add(coffee.get());
         });
-        Order order = new Order(coffees);
-        order.setType(orderRequest.getType());
+        Order order = new Order(coffees, orderDTO.type());
 
 //        orderManager.addOrder(order);
 

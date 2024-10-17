@@ -1,9 +1,9 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.dto.jwt.JwtTokenDTO;
+import com.example.coffeeshop.dto.auth.JwtTokenDTO;
+import com.example.coffeeshop.dto.auth.LoginDTO;
+import com.example.coffeeshop.dto.auth.RegisterDTO;
 import com.example.coffeeshop.exceptions.UnauthorizedException;
-import com.example.coffeeshop.requests.LogInRequest;
-import com.example.coffeeshop.requests.RegisterRequest;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +40,13 @@ public class AuthService {
         this.emailService = emailService;
     }
 
-    public JwtTokenDTO register(RegisterRequest registerRequest) {
+    public JwtTokenDTO register(RegisterDTO registerDTO) {
         User user = new User(
-                registerRequest.getFirstName(),
-                registerRequest.getLastName(),
-                registerRequest.getUsername(),
-                registerRequest.getEmail(),
-                passwordEncoder.encode(registerRequest.getPassword()),
+                registerDTO.firstName(),
+                registerDTO.lastName(),
+                registerDTO.username(),
+                registerDTO.email(),
+                passwordEncoder.encode(registerDTO.password()),
                 null
         );
         userService.save(user);
@@ -54,16 +54,16 @@ public class AuthService {
         return jwtService.generateToken(user);
     }
 
-    public JwtTokenDTO login(LogInRequest logInRequest) {
-        Optional<User> user = userRepository.findByUsername(logInRequest.getUsername());
+    public JwtTokenDTO login(LoginDTO loginDTO) {
+        Optional<User> user = userRepository.findByUsername(loginDTO.username());
         if (user.isEmpty()) {
             throw new UnauthorizedException("Username not valid.");
         }
-        if (!passwordEncoder.matches(logInRequest.getPassword(), user.get().getPassword())) {
+        if (!passwordEncoder.matches(loginDTO.password(), user.get().getPassword())) {
             throw new UnauthorizedException("Password not valid.");
         }
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(logInRequest.getUsername(), logInRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password()));
         return jwtService.generateToken(user.get());
     }
 
