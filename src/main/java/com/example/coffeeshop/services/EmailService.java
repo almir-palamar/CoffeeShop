@@ -29,7 +29,7 @@ public class EmailService {
     @Async
     public void sendWelcomeEmail(String to) {
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo("palamar995@gmail.com");
+        email.setTo(to);
         email.setFrom("CoffeeShop");
         email.setSubject("Welcome to Coffeeshop");
         email.setText("Welcome to Coffeeshop !!!");

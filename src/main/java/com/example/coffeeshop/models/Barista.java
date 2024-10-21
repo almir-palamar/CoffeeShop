@@ -25,6 +25,8 @@ public class Barista {
     public Barista() {
     }
 
+    public Long getId() {return id;}
+
     public String getName() {
         return name;
     }

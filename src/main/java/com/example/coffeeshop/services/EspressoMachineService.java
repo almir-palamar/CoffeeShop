@@ -27,4 +27,11 @@ public class EspressoMachineService {
                 espressoMachine -> espressoMachine.setGrinder(300));
     }
 
+    public void refillGrinder(Long id) {
+        EspressoMachine espressoMachine = espressoMachineRepository.findById(id).orElseThrow();
+        espressoMachine.setGrinder(300);
+    }
+
+    //expose grinders capacity as a global variable as well as time needed to refill grinder
+
 }

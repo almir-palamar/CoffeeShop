@@ -1,6 +1,5 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.app.OrderManager;
 import com.example.coffeeshop.dto.order.OrderDTO;
 import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Coffee;
@@ -9,9 +8,9 @@ import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +21,13 @@ public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
-    private final OrderManager orderManager;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository,
-                        CoffeeRepository coffeeRepository, OrderManager orderManager) {
+    public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, ApplicationEventPublisher eventPublisher) {
         this.orderRepository = orderRepository;
         this.coffeeRepository = coffeeRepository;
-        this.orderManager = orderManager;
+        this.eventPublisher = eventPublisher;
     }
 
     public Order findById(Long id) {
@@ -54,9 +52,7 @@ public class OrderService {
             coffees.add(coffee.get());
         });
         Order order = new Order(coffees, orderDTO.type());
-
-//        orderManager.addOrder(order);
-
+        eventPublisher.publishEvent(order);
         return this.orderRepository.save(order);
     }
 

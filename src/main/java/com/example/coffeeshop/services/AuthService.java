@@ -50,7 +50,7 @@ public class AuthService {
                 null
         );
         userService.save(user);
-        this.emailService.sendWelcomeEmail("user@gmail.com");
+        this.emailService.sendWelcomeEmail(registerDTO.email());
         return jwtService.generateToken(user);
     }
 
