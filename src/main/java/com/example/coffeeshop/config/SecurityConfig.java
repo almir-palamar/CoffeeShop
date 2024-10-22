@@ -70,6 +70,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/register").permitAll()
                                 .requestMatchers("/api/v1/auth/logout").permitAll()
                                 .requestMatchers("/api/v1/orders/**").permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/coffees", "/api/v1/coffees/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/coffees/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/coffees/**").hasAuthority("ADMIN")
