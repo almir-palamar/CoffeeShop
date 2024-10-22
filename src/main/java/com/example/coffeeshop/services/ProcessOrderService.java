@@ -1,13 +1,8 @@
 package com.example.coffeeshop.services;
 
-import com.example.coffeeshop.enums.BaristaStatusEnum;
-import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Barista;
-import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
-import jakarta.transaction.Transactional;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +25,7 @@ public class ProcessOrderService extends Thread {
         this.baristaService = baristaService;
         this.espressoMachineService = espressoMachineService;
         this.orderService = orderService;
-        this.start();
+//        this.start();
     }
 
     @Override
@@ -44,7 +39,14 @@ public class ProcessOrderService extends Thread {
                         Barista baristaToTakeOrder = availableBaristas.getFirst();
                         if (baristaToTakeOrder != null) {
                             ordersToProcess.remove();
-                            processOrder(baristaToTakeOrder, orderToProcess);
+                            ProcessOrder po = new ProcessOrder(
+                                    baristaService,
+                                    espressoMachineService,
+                                    orderService,
+                                    orderToProcess,
+                                    baristaToTakeOrder
+                            );
+                            po.start();
                         }
                     } else {
                         sleep(10000);
@@ -61,27 +63,4 @@ public class ProcessOrderService extends Thread {
         this.ordersToProcess.add(order);
     }
 
-    @Async
-    @Transactional
-    public void processOrder(Barista baristaToTakeOrder, Order order) throws InterruptedException {
-        if (!baristaService.isThereEnoughCaffeineInGrinder(baristaToTakeOrder, this.calculateCaffeineNeeded(order))) {
-            baristaService.updateBaristaStatus(baristaToTakeOrder.getId(), BaristaStatusEnum.FILLING_GRINDER);
-            espressoMachineService.refillGrinder(baristaToTakeOrder.getEspressoMachine().getId());
-            sleep(20000); // put here global variable for the time needed to refill grinder
-        }
-        baristaService.updateBaristaStatus(baristaToTakeOrder.getId(), BaristaStatusEnum.MAKING_COFFEE);
-        sleep(this.calculateProcessingTime(order) * 1000);
-        baristaService.updateBaristaStatus(baristaToTakeOrder.getId(), BaristaStatusEnum.AVAILABLE);
-        orderService.updateOrderStatus(order.getId(), OrderEnum.Status.DELIVERED);
-        espressoMachineService.updateGrinderCoffeeAmount(
-                this.calculateCaffeineNeeded(order), baristaToTakeOrder.getEspressoMachine());
-    }
-
-    private Integer calculateProcessingTime(Order order) {
-        return order.getCoffees().stream().mapToInt(Coffee::getBrewTime).sum();
-    }
-
-    private Integer calculateCaffeineNeeded(Order order) {
-        return order.getCoffees().stream().mapToInt(Coffee::getCaffeineGram).sum();
-    }
 }

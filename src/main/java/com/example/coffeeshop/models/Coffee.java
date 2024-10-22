@@ -1,8 +1,16 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Coffee {
 
     @Id
@@ -14,6 +22,14 @@ public class Coffee {
     private Integer caffeineGram;
     private Float price;
     private String imagePath;
+    @CreatedBy
+    private Long createdBy;
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @LastModifiedBy
+    private Long lastModifiedBy;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 
     public Coffee(String name, Integer brewTime, Integer caffeineGram, Float price, String imagePath) {
         this.name = name;

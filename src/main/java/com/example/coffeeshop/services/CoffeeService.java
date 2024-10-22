@@ -33,7 +33,6 @@ public class CoffeeService {
     }
 
     public Coffee findById(Long id) throws EntityNotFoundException {
-        logger.error("EKKSEEEEEEEPSNNNNNNNNNN");
         return this.coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -60,7 +59,6 @@ public class CoffeeService {
 
             return this.coffeeRepository.save(coffee);
         } catch (IOException e) {
-
             throw new RuntimeException(e);
         }
     }
@@ -73,6 +71,7 @@ public class CoffeeService {
             updatedCoffee.setPrice(coffee.getPrice());
             updatedCoffee.setBrewTime(coffee.getBrewTime());
             updatedCoffee.setCaffeineGram(coffee.getCaffeineGram());
+            this.coffeeRepository.save(updatedCoffee);
             return updatedCoffee;
         }
         return null;
