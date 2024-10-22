@@ -32,7 +32,7 @@ public class EmailService {
         email.setTo(to);
         email.setFrom("CoffeeShop");
         email.setSubject("Welcome to Coffeeshop");
-        email.setText("Welcome to Coffeeshop !!!");
+        email.setText("Welcome to Coffeeshop!");
         this.mailSender.send(email);
     }
 
