@@ -1,7 +1,6 @@
 services:
-  coffeeShop:
+  cs-mysql:
     image: mysql:8.3.0
-    container_name: coffeeShop
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
@@ -10,3 +9,21 @@ services:
     volumes:
       - ./mysql-backup:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - coffeeShop
+
+  cs-spring:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - cs-mysql
+    volumes:
+      - .:/coffeeShop
+    networks:
+      - coffeeShop
+
+networks:
+  coffeeShop:
