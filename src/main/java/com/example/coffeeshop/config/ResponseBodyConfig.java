@@ -1,7 +1,6 @@
 package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.dto.ResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
@@ -54,7 +53,7 @@ public class ResponseBodyConfig implements ResponseBodyAdvice<Object> {
                                   @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   @NonNull ServerHttpRequest request,
                                   @NonNull ServerHttpResponse response) {
-        return formatResponse(body); //with this swagger wont work
+        return body; //with this swagger wont work
     }
 
     private Object formatResponse(Object body) {

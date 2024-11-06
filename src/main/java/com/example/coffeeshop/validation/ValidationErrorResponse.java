@@ -2,7 +2,6 @@ package com.example.coffeeshop.validation;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ValidationErrorResponse {

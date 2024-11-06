@@ -4,6 +4,8 @@ import com.example.coffeeshop.dto.coffee.CoffeeDTO;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/coffees")
+@Tag(name = "Coffees")
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
@@ -39,6 +42,7 @@ public class CoffeeController {
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityRequirement(name = "JWTAuth")
     public Coffee create(@Valid
                          @RequestBody CoffeeDTO coffeeDTO) {
         return this.coffeeService.save(coffeeDTO, null);
@@ -46,6 +50,7 @@ public class CoffeeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "JWTAuth")
     public Coffee update(@RequestBody Coffee coffee, @PathVariable Long id) {
         return this.coffeeService.update(coffee, id);
     }
@@ -53,6 +58,7 @@ public class CoffeeController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
+    @SecurityRequirement(name = "JWTAuth")
     public Coffee delete(@PathVariable Long id) {
         return this.coffeeService.deleteById(id);
     }
