@@ -23,7 +23,7 @@ public class OpenAPIConfig {
                 .type(SecurityScheme.Type.HTTP)
                 .name("JWTAuth")
                 .scheme("bearer")
-                .bearerFormat("JW")
+                .bearerFormat("JWT")
                 .in(SecurityScheme.In.HEADER);
     }
 }
