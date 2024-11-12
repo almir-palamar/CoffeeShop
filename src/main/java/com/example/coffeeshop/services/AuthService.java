@@ -69,6 +69,7 @@ public class AuthService {
 
     public void logout(String jwtToken) {
         jwtService.invalidateToken(jwtToken);
+        SecurityContextHolder.clearContext();
     }
 
     public User me() {

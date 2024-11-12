@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -27,17 +27,13 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public Authentication me() {
-        return SecurityContextHolder.getContext().getAuthentication();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).get();
     }
 
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUsername(username).get();
-            }
-        };
+    public Authentication me() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
     public List<UserDTO> findAll() {

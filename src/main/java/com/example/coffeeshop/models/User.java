@@ -26,6 +26,8 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+    @OneToMany(mappedBy = "user")
+    private List<JwtToken> jwtTokens;
 
     public User(String firstName, String lastName, String username, String email, String password, @Nullable RoleEnum role) {
         this.firstName = firstName;

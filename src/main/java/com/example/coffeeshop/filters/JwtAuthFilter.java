@@ -1,5 +1,6 @@
 package com.example.coffeeshop.filters;
 
+import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.services.JwtService;
 import com.example.coffeeshop.services.UserService;
 import jakarta.servlet.FilterChain;
@@ -46,8 +47,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             jwtToken = authHeader.substring(7);
             username = jwtService.extractUsername(jwtToken);
+
+            if (jwtService.isTokenRevoked(jwtToken)) {
+                throw new UnauthorizedException("porukaa");
+            }
+
             if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userService.userDetailsService().loadUserByUsername(username);
+                UserDetails userDetails = userService.loadUserByUsername(username);
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

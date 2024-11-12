@@ -1,6 +1,9 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
+import com.example.coffeeshop.models.JwtToken;
+import com.example.coffeeshop.models.User;
+import com.example.coffeeshop.repositories.JwtRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,6 +28,12 @@ public class JwtService {
 
     @Value("${jwt.token.expiration}")
     private Long jwtExpiration;
+
+    private final JwtRepository jwtRepository;
+
+    public JwtService(JwtRepository jwtRepository) {
+        this.jwtRepository = jwtRepository;
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -56,6 +65,7 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
+        jwtRepository.save(new JwtToken(jwtToken, false, (User) userDetails));
         return new JwtTokenDTO(jwtToken);
     }
 
@@ -81,6 +91,14 @@ public class JwtService {
     public void invalidateToken(String token) {
         Claims claims = extractAllClaims(token.replace("Bearer ", ""));
         claims.setExpiration(new Date());
+        JwtToken jwtToken = jwtRepository.findByToken(token.replace("Bearer ", ""));
+        jwtToken.setRevoked(true);
+        jwtRepository.save(jwtToken);
+    }
+
+    public boolean isTokenRevoked(String token) {
+        JwtToken jwtToken = jwtRepository.findByToken(token);
+        return jwtToken != null && jwtToken.isRevoked();
     }
 
 }

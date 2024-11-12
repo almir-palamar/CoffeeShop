@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "coffees")
 public class Coffee {
 
     @Id

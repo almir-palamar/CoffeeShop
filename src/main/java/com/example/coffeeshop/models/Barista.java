@@ -4,6 +4,7 @@ import com.example.coffeeshop.enums.BaristaStatusEnum;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "baristas")
 public class Barista {
 
     @Id
