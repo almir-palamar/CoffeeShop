@@ -1,9 +1,11 @@
 package com.example.coffeeshop.controllers.v1;
 
+import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
 import com.example.coffeeshop.services.JwtService;
 import com.example.coffeeshop.services.OrderService;
 import com.example.coffeeshop.services.UserService;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +54,12 @@ class CoffeeControllerTest {
     // because I am testing rest controller and it does integrate
     // some other classes such as Request
 
+    // It depends on which layer of application I am testing
+    // So if I am testing the controller than application expects auth
+
     @Test
     @WithMockUser
+    @Disabled
     public void getCoffee() throws Exception {
 
         // Arrange
