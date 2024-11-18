@@ -80,6 +80,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(toGoPendingOrdersFilter, JwtAuthFilter.class)
+                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+                        .logoutSuccessUrl("/api/v1/auth/login").permitAll())
                 .build();
     }
 
