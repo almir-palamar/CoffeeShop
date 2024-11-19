@@ -1,5 +1,6 @@
 package com.example.coffeeshop.repositories;
 
+import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.seeders.CoffeeSeeder;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @Import(CoffeeSeeder.class)
-class CoffeeRepositoryTest {
+class CoffeeRepositoryTest extends CoffeeShopApplicationTests {
 
     @Autowired
     private CoffeeRepository coffeeRepository;

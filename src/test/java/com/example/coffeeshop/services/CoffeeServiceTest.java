@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class CoffeeServiceTest {
+class CoffeeServiceTest extends CoffeeShopApplicationTests {
 
     @Autowired
     private CoffeeService coffeeService;
