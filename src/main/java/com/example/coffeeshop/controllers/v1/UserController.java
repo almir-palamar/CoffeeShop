@@ -30,10 +30,4 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/me")
-    @SecurityRequirement(name = "JWTAuth")
-    public Authentication me() {
-        return this.userService.me();
-    }
-
 }

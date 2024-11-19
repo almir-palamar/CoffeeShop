@@ -3,16 +3,19 @@ package com.example.coffeeshop.services;
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
 import com.example.coffeeshop.dto.auth.LoginDTO;
 import com.example.coffeeshop.dto.auth.RegisterDTO;
+import com.example.coffeeshop.dto.user.UserDTO;
 import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service

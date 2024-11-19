@@ -5,9 +5,6 @@ import com.example.coffeeshop.mappers.UserMapper;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -28,12 +25,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).get();
-    }
-
-    public Authentication me() {
-        return SecurityContextHolder.getContext().getAuthentication();
     }
 
     public List<UserDTO> findAll() {

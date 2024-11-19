@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -39,15 +40,15 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public JwtTokenDTO generateToken(UserDetails userDetails) {
+    public JwtTokenDTO generateToken(User user) {
         HashMap<String, Object> claims = new HashMap<>();
-        claims.put("role", userDetails.getAuthorities());
-        return generateToken(claims, userDetails);
+        claims.put("role", user.getAuthorities());
+        return generateToken(claims, user);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenRevoked(token));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
@@ -55,17 +56,17 @@ public class JwtService {
         return claimsResolvers.apply(claims);
     }
 
-    private JwtTokenDTO generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    private JwtTokenDTO generateToken(Map<String, Object> extraClaims, User user) {
         String jwtToken = Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-        jwtRepository.save(new JwtToken(jwtToken, false, (User) userDetails));
+        invalidateOldTokens(user.getId());
+        jwtRepository.save(new JwtToken(jwtToken, false, user));
         return new JwtTokenDTO(jwtToken);
     }
 
@@ -99,6 +100,11 @@ public class JwtService {
     public boolean isTokenRevoked(String token) {
         JwtToken jwtToken = jwtRepository.findByToken(token);
         return jwtToken != null && jwtToken.isRevoked();
+    }
+
+    private void invalidateOldTokens(Long userId) {
+        List<JwtToken> validOldTokens = jwtRepository.findValidTokensByUserId(userId);
+        validOldTokens.forEach(token -> invalidateToken(token.getToken()));
     }
 
 }

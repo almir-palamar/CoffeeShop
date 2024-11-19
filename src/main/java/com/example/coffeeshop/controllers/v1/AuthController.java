@@ -31,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public JwtTokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
-        return this.authService.register(registerDTO);
+        return authService.register(registerDTO);
     }
 
     @GetMapping("/logout")
@@ -43,7 +43,7 @@ public class AuthController {
     @GetMapping("/me")
     @SecurityRequirement(name = "JWTAuth")
     public User me() {
-        return this.authService.me();
+        return authService.me();
     }
 
 }
