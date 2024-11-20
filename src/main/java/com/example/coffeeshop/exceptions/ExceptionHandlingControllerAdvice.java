@@ -90,8 +90,8 @@ public class ExceptionHandlingControllerAdvice {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ResponseDTO> handleAccessDeniedException(AccessDeniedException ex) {
-        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.UNAUTHORIZED, "unauthorized_access" , null, true);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
+        ResponseDTO responseDTO = new ResponseDTO(HttpStatus.FORBIDDEN, "unauthorized_access" , null, true);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseDTO);
     }
 
 }

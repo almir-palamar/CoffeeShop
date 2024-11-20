@@ -1,4 +1,4 @@
-package com.example.coffeeshop.controllers.v1;
+package com.example.coffeeshop.integration.controllers.v1;
 
 import com.example.coffeeshop.CoffeeShopApplicationTests;
 import org.junit.jupiter.api.Test;
@@ -25,12 +25,10 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
     private MockMvc mvc;
 
     @Test
-    public void onGetCoffeesShouldReturnCoffees() throws Exception {
+    void shouldReturnAllCoffees() throws Exception {
 
-        // Arrange
         RequestBuilder request = get("/api/v1/coffees");
 
-        // Act/Assert
         mvc.perform(request)
                 .andExpect(status().isOk())
                  .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -39,8 +37,8 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
 
     @Test
     @WithMockUser(authorities = {"ADMIN"})
-    public void onCreateCoffeeShouldReturnCreatedIfAdmin() throws Exception {
-        // Arrange
+    void onCreateShouldReturnCreatedIfAdminLoggedIn() throws Exception {
+
         String newCoffee = """     
                 {
                     "name": "Machiatto",
@@ -54,7 +52,6 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
                 .content(newCoffee)
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // Act/Assert
         MvcResult result = mvc.perform(request)
                 .andExpect(status().isCreated()).andReturn();
 
@@ -63,8 +60,8 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
 
     @Test
     @WithMockUser(authorities = {"USER"})
-    public void onCreateShouldThrowExceptionIfRegularUserLoggedIn() throws Exception {
-        // Arrange
+    void onCreateShouldThrowExceptionIfUserLoggedIn() throws Exception {
+
         String newCoffee = """     
                 {
                     "name": "Machiatto",
@@ -78,7 +75,6 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
                 .content(newCoffee)
                 .contentType(MediaType.APPLICATION_JSON);
 
-        // Act/Assert
         mvc.perform(request)
                 .andExpect(status().isForbidden()).andReturn();
     }

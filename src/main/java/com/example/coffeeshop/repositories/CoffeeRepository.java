@@ -11,6 +11,6 @@ public interface CoffeeRepository extends JpaRepository<Coffee, Long> {
 
     Optional<Coffee> findByName (String name);
 
-    Coffee findById(long id);
+    Optional<Coffee> findById (Long id);
 
 }
