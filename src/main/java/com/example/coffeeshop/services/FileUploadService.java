@@ -1,5 +1,6 @@
 package com.example.coffeeshop.services;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,11 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
+@NoArgsConstructor
 public class FileUploadService {
 
     private static final Path ROOT_LOCATION = Paths.get("src/main/resources/images");
-
-    public FileUploadService() {}
 
     public void storeFile(String fileName, MultipartFile file) throws IOException {
         Path destinationFile = ROOT_LOCATION.resolve(Paths.get(fileName))

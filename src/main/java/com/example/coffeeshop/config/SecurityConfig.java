@@ -3,7 +3,7 @@ package com.example.coffeeshop.config;
 import com.example.coffeeshop.filters.JwtAuthFilter;
 import com.example.coffeeshop.filters.ToGoPendingOrdersFilter;
 import com.example.coffeeshop.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,23 +23,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final ToGoPendingOrdersFilter toGoPendingOrdersFilter;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
-                          UserService userService,
-                          PasswordEncoder passwordEncoder,
-                          ToGoPendingOrdersFilter toGoPendingOrdersFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.toGoPendingOrdersFilter = toGoPendingOrdersFilter;
-    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

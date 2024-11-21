@@ -2,20 +2,16 @@ package com.example.coffeeshop.seeders;
 
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class CoffeeSeeder implements CommandLineRunner {
 
     private final CoffeeRepository coffeeRepository;
-
-    @Autowired
-    public CoffeeSeeder(CoffeeRepository coffeeRepository) {
-        this.coffeeRepository = coffeeRepository;
-    }
 
     private void seedCoffees() {
         List<Coffee> coffeeList = List.of(

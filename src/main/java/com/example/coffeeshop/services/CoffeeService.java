@@ -1,12 +1,9 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
-import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,17 +13,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
     private final FileUploadService fileUploadService;
-    private Logger logger = LoggerFactory.getLogger(CoffeeService.class);
-
-    @Autowired
-    public CoffeeService(CoffeeRepository coffeeRepository, FileUploadService fileUploadService) {
-        this.coffeeRepository = coffeeRepository;
-        this.fileUploadService = fileUploadService;
-    }
 
     public Optional<Coffee> findByName(String name) {
         return this.coffeeRepository.findByName(name);

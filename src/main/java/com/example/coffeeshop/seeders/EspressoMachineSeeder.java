@@ -2,6 +2,7 @@ package com.example.coffeeshop.seeders;
 
 import com.example.coffeeshop.models.EspressoMachine;
 import com.example.coffeeshop.repositories.EspressoMachineRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -11,14 +12,10 @@ import java.util.List;
 
 @Component
 @Order(1)
+@AllArgsConstructor
 public class EspressoMachineSeeder implements CommandLineRunner {
 
     private final EspressoMachineRepository espressoMachineRepository;
-
-    @Autowired
-    public EspressoMachineSeeder(EspressoMachineRepository espressoMachineRepository) {
-        this.espressoMachineRepository = espressoMachineRepository;
-    }
 
     private void seedEspressoMachines() {
         List<EspressoMachine> espressoMachines = List.of(

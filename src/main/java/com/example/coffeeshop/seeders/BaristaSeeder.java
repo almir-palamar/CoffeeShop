@@ -4,6 +4,7 @@ import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.models.EspressoMachine;
 import com.example.coffeeshop.repositories.BaristaRepository;
 import com.example.coffeeshop.repositories.EspressoMachineRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -13,17 +14,11 @@ import java.util.Optional;
 
 @Component
 @Order(2)
+@AllArgsConstructor
 public class BaristaSeeder implements CommandLineRunner {
 
     private final BaristaRepository baristaRepository;
     private final EspressoMachineRepository espressoMachineRepository;
-
-    public BaristaSeeder(BaristaRepository baristaRepository, EspressoMachineRepository espressoMachineRepository) {
-        this.baristaRepository = baristaRepository;
-        this.espressoMachineRepository = espressoMachineRepository;
-    }
-
-    // this should use barista and espresso services
 
     private void seedBaristas() {
         Optional<EspressoMachine> type1 = espressoMachineRepository.findById(1L);

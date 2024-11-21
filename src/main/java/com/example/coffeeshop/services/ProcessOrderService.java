@@ -2,6 +2,7 @@ package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.models.Order;
+import lombok.AllArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -10,23 +11,13 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Service
+@AllArgsConstructor
 public class ProcessOrderService extends Thread {
 
     private final Queue<Order> ordersToProcess = new ConcurrentLinkedDeque<>();
     private final BaristaService baristaService;
     private final EspressoMachineService espressoMachineService;
     private final OrderService orderService;
-
-    public ProcessOrderService(
-            BaristaService baristaService,
-            EspressoMachineService espressoMachineService,
-            OrderService orderService
-    ) {
-        this.baristaService = baristaService;
-        this.espressoMachineService = espressoMachineService;
-        this.orderService = orderService;
-//        this.start();
-    }
 
     @Override
     public void run() {

@@ -3,22 +3,20 @@ package com.example.coffeeshop.services;
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
 import com.example.coffeeshop.dto.auth.LoginDTO;
 import com.example.coffeeshop.dto.auth.RegisterDTO;
-import com.example.coffeeshop.dto.user.UserDTO;
 import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -27,21 +25,6 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
-
-    @Autowired
-    public AuthService(UserRepository userRepository,
-                       UserService userService,
-                       PasswordEncoder passwordEncoder,
-                       JwtService jwtService,
-                       AuthenticationManager authenticationManager,
-                       EmailService emailService) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-        this.emailService = emailService;
-    }
 
     public JwtTokenDTO register(RegisterDTO registerDTO) {
         User user = new User(

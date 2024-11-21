@@ -2,9 +2,17 @@ package com.example.coffeeshop.models;
 
 import com.example.coffeeshop.enums.BaristaStatusEnum;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Getter;
 
 @Entity
 @Table(name = "baristas")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class Barista {
 
     @Id
@@ -21,35 +29,6 @@ public class Barista {
         this.name = name;
         this.espressoMachine = espressoMachine;
         this.status = BaristaStatusEnum.AVAILABLE;
-    }
-
-    public Barista() {
-    }
-
-    public Long getId() {return id;}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public EspressoMachine getEspressoMachine() {
-        return espressoMachine;
-    }
-
-    public void setEspressoMachine(EspressoMachine espressoMachine) {
-        this.espressoMachine = espressoMachine;
-    }
-
-    public BaristaStatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(BaristaStatusEnum status) {
-        this.status = status;
     }
 
 }

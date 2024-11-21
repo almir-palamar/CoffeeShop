@@ -7,7 +7,7 @@ import com.example.coffeeshop.services.CoffeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,14 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/coffees")
 @Tag(name = "Coffees")
+@AllArgsConstructor
 public class CoffeeController {
 
     private final CoffeeService coffeeService;
-
-    @Autowired
-    public CoffeeController(CoffeeService coffeeService) {
-        this.coffeeService = coffeeService;
-    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

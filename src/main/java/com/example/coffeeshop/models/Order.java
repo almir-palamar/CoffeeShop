@@ -3,11 +3,19 @@ package com.example.coffeeshop.models;
 import com.example.coffeeshop.enums.OrderEnum;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class Order {
 
     @Id
@@ -29,53 +37,4 @@ public class Order {
         this.type = type;
     }
 
-    public Order() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public List<Coffee> getCoffees() {
-        return coffees;
-    }
-
-    public void setCoffees(List<Coffee> coffees) {
-        this.coffees = coffees;
-    }
-
-    public OrderEnum.Type getType() {
-        return type;
-    }
-
-    public void setType(OrderEnum.Type type) {
-        this.type = type;
-    }
-
-    public OrderEnum.Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderEnum.Status status) {
-        this.status = status;
-    }
-
-    public Barista getBarista() {
-        return barista;
-    }
-
-    public void setBarista(Barista barista) {
-        this.barista = barista;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", coffees=" + coffees +
-                ", barista=" + barista +
-                ", status=" + status +
-                ", type=" + type +
-                '}';
-    }
 }

@@ -7,7 +7,7 @@ import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -17,18 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
     private final ApplicationEventPublisher eventPublisher;
-
-    @Autowired
-    public OrderService(OrderRepository orderRepository, CoffeeRepository coffeeRepository, ApplicationEventPublisher eventPublisher) {
-        this.orderRepository = orderRepository;
-        this.coffeeRepository = coffeeRepository;
-        this.eventPublisher = eventPublisher;
-    }
 
     public Order findById(Long id) {
         Optional<Order> order = this.orderRepository.findById(id);

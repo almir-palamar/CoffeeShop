@@ -6,7 +6,9 @@ import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class ProcessOrder extends Thread{
 
     private final BaristaService baristaService;
@@ -14,20 +16,6 @@ public class ProcessOrder extends Thread{
     private final OrderService orderService;
     private final Order order;
     private final Barista baristaToTakeOrder;
-
-    public ProcessOrder(
-            BaristaService baristaService,
-            EspressoMachineService espressoMachineService,
-            OrderService orderService,
-            Order order,
-            Barista baristaToTakeOrder
-    ) {
-        this.baristaService = baristaService;
-        this.espressoMachineService = espressoMachineService;
-        this.orderService = orderService;
-        this.order = order;
-        this.baristaToTakeOrder = baristaToTakeOrder;
-    }
 
     @Override
     public void run() {

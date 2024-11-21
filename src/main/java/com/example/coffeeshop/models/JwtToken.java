@@ -1,9 +1,17 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tokens")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class JwtToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,29 +28,4 @@ public class JwtToken {
         this.user = user;
     }
 
-    public JwtToken() {}
-
-    public boolean isRevoked() {
-        return revoked;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public void setRevoked(boolean revoked) {
-        this.revoked = revoked;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

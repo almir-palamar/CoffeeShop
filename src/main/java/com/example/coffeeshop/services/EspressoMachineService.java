@@ -3,18 +3,14 @@ package com.example.coffeeshop.services;
 import com.example.coffeeshop.models.EspressoMachine;
 import com.example.coffeeshop.repositories.EspressoMachineRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class EspressoMachineService {
 
     private final EspressoMachineRepository espressoMachineRepository;
-
-    @Autowired
-    public EspressoMachineService(EspressoMachineRepository espressoMachineRepository) {
-        this.espressoMachineRepository = espressoMachineRepository;
-    }
 
     public void updateGrinderCoffeeAmount(Integer coffeeAmount, EspressoMachine espressoMachine) {
         espressoMachine.setGrinder(espressoMachine.getGrinder() - coffeeAmount);

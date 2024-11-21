@@ -3,20 +3,16 @@ package com.example.coffeeshop.services;
 import com.example.coffeeshop.enums.BaristaStatusEnum;
 import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.repositories.BaristaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BaristaService {
 
     private final BaristaRepository baristaRepository;
-
-    @Autowired
-    public BaristaService(BaristaRepository baristaRepository) {
-        this.baristaRepository = baristaRepository;
-    }
 
     public List<Barista> saveAll(List<Barista> baristas) {
         return this.baristaRepository.saveAll(baristas);

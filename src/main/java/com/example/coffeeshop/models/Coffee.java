@@ -1,6 +1,10 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,6 +16,10 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "coffees")
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class Coffee {
 
     @Id
@@ -40,50 +48,4 @@ public class Coffee {
         this.imagePath = imagePath;
     }
 
-    public Coffee() {}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getBrewTime() {
-        return brewTime;
-    }
-
-    public void setBrewTime(Integer brewTime) {
-        this.brewTime = brewTime;
-    }
-
-    public Integer getCaffeineGram() {
-        return caffeineGram;
-    }
-
-    public void setCaffeineGram(Integer caffeineGram) {
-        this.caffeineGram = caffeineGram;
-    }
-
-    public Float getPrice() {
-        return price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    @Override
-    public String toString() {
-        return name + " [" + price + "], " + brewTime + "s [" + caffeineGram + "]";
-    }
 }
