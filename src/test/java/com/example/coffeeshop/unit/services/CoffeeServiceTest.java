@@ -1,6 +1,7 @@
 package com.example.coffeeshop.unit.services;
 
 import com.example.coffeeshop.CoffeeShopApplicationTests;
+import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.services.CoffeeService;
 import com.example.coffeeshop.services.FileUploadService;
@@ -25,9 +26,12 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
     @Mock
     private FileUploadService fileUploadService;
 
+    @Mock
+    private CoffeeMapper coffeeMapper;
+
     @BeforeEach
     void setUp() {
-        coffeeService = new CoffeeService(coffeeRepository, fileUploadService);
+        coffeeService = new CoffeeService(coffeeRepository, fileUploadService, coffeeMapper);
     }
 
     @Test

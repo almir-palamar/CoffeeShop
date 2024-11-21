@@ -25,8 +25,8 @@ public class CoffeeController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Coffee getCoffee(@PathVariable Long id) throws EntityNotFoundException {
-        return this.coffeeService.findById(id).orElseThrow(EntityNotFoundException::new);
+    public CoffeeDTO getCoffee(@PathVariable Long id) {
+        return this.coffeeService.findById(id);
     }
 
     @GetMapping

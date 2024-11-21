@@ -1,10 +1,7 @@
 package com.example.coffeeshop.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "tokens")
@@ -12,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class JwtToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

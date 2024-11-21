@@ -1,9 +1,10 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
+import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,18 +14,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
     private final FileUploadService fileUploadService;
+    private final CoffeeMapper coffeeMapper;
 
     public Optional<Coffee> findByName(String name) {
         return this.coffeeRepository.findByName(name);
     }
 
-    public Optional<Coffee> findById(Long id) {
-        return this.coffeeRepository.findById(id);
+    public CoffeeDTO findById(Long id) {
+        Coffee coffee = this.coffeeRepository.findById(id).orElseThrow();
+        return coffeeMapper.apply(coffee);
     }
 
     public List<Coffee> findAll() {

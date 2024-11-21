@@ -2,10 +2,7 @@ package com.example.coffeeshop.models;
 
 import com.example.coffeeshop.enums.BaristaStatusEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Table(name = "baristas")
@@ -13,6 +10,7 @@ import lombok.Getter;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class Barista {
 
     @Id
