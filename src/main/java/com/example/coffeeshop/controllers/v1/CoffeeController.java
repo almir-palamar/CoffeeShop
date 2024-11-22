@@ -1,7 +1,6 @@
 package com.example.coffeeshop.controllers.v1;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
-import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.services.CoffeeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,29 +25,29 @@ public class CoffeeController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CoffeeDTO getCoffee(@PathVariable Long id) {
-        return this.coffeeService.findById(id);
+        return coffeeService.findById(id);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Coffee>> getCoffees() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.coffeeService.findAll());
+    public ResponseEntity<List<CoffeeDTO>> getCoffees() {
+        return ResponseEntity.status(HttpStatus.OK).body(coffeeService.findAll());
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityRequirement(name = "JWTAuth")
-    public Coffee create(@Valid
+    public CoffeeDTO create(@Valid
                          @RequestBody CoffeeDTO coffeeDTO) {
-        return this.coffeeService.save(coffeeDTO, null);
+        return coffeeService.save(coffeeDTO, null);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "JWTAuth")
     public Coffee update(@RequestBody Coffee coffee, @PathVariable Long id) {
-        return this.coffeeService.update(coffee, id);
+        return coffeeService.update(coffee, id);
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +55,6 @@ public class CoffeeController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @SecurityRequirement(name = "JWTAuth")
     public Coffee delete(@PathVariable Long id) {
-        return this.coffeeService.deleteById(id);
+        return coffeeService.deleteById(id);
     }
 }

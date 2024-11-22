@@ -1,5 +1,6 @@
 package com.example.coffeeshop.unit.repositories;
 
+import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // force DataJpaTest to use MySQLContainer
-@Transactional(propagation = Propagation.NOT_SUPPORTED) // enables to see changes in db
-class CoffeeRepositoryTest {
+@Transactional(propagation = Propagation.NOT_SUPPORTED)                      // enables to see changes in db
+@Rollback                                                                    // add manual rollback after each test as the @Transactional is disabled
+class CoffeeRepositoryTest extends CoffeeShopApplicationTests {
 
     @Autowired
     private CoffeeRepository coffeeRepository;
@@ -31,12 +33,45 @@ class CoffeeRepositoryTest {
     @Container
     @ServiceConnection
     public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0")
-            .withUsername("test")
-            .withPassword("test")
-            .withDatabaseName("coffeeshop-test");
+            .withUsername("user")
+            .withPassword("pass")
+            .withDatabaseName("coffeeshop");
 
     @Test
-    @Rollback
+    void shouldReturnCoffeeById() {
+        Coffee espresso = Coffee.builder()
+                .id(1L)
+                .name("Espresso")
+                .caffeineGram(8)
+                .brewTime(40)
+                .price(1.60f)
+                .build();
+        coffeeRepository.saveAndFlush(espresso);
+
+        Coffee foundCoffee = coffeeRepository.findById(espresso.getId()).orElse(null);
+
+        assertThat(foundCoffee).isNotNull();
+        assertThat(foundCoffee.getName()).isEqualTo(espresso.getName());
+    }
+
+    @Test
+    void shouldReturnCoffeeByName() {
+        Coffee espresso = Coffee.builder()
+                .id(1L)
+                .name("Espresso")
+                .caffeineGram(8)
+                .brewTime(40)
+                .price(1.60f)
+                .build();
+        coffeeRepository.saveAndFlush(espresso);
+
+        Coffee foundCoffee = coffeeRepository.findByName(espresso.getName()).orElse(null);
+
+        assertThat(foundCoffee).isNotNull();
+        assertThat(foundCoffee.getName()).isEqualTo(espresso.getName());
+    }
+
+    @Test
     void shouldReturnAllCoffees() {
         Coffee espresso = Coffee.builder()
                 .id(1L)
@@ -55,42 +90,6 @@ class CoffeeRepositoryTest {
     }
 
     @Test
-    @Rollback
-    void shouldReturnCoffeeById() {
-        Coffee espresso = Coffee.builder()
-                .id(1L)
-                .name("Espresso")
-                .caffeineGram(8)
-                .brewTime(40)
-                .price(1.60f)
-                .build();
-        coffeeRepository.saveAndFlush(espresso);
-
-        Coffee foundCoffee = coffeeRepository.findById(espresso.getId()).orElse(null);
-
-        assertThat(foundCoffee).isNotNull();
-        assertThat(foundCoffee.getName()).isEqualTo(espresso.getName());
-    }
-
-    @Test
-    @Rollback
-    void shouldReturnCoffeeByName() {
-        Coffee espresso = Coffee.builder()
-                .id(1L)
-                .name("Espresso")
-                .caffeineGram(8)
-                .brewTime(40)
-                .price(1.60f)
-                .build();
-
-        Coffee foundCoffee = coffeeRepository.findByName(espresso.getName()).orElse(null);
-
-        assertThat(foundCoffee).isNotNull();
-        assertThat(foundCoffee.getName()).isEqualTo(espresso.getName());
-    }
-
-    @Test
-    @Rollback
     void shouldAddAndReturnNewCoffee() {
         Coffee espresso = Coffee.builder()
                 .id(1L)

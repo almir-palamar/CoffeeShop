@@ -1,6 +1,7 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
+import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
@@ -21,20 +22,23 @@ public class CoffeeService {
     private final FileUploadService fileUploadService;
     private final CoffeeMapper coffeeMapper;
 
-    public Optional<Coffee> findByName(String name) {
-        return this.coffeeRepository.findByName(name);
-    }
-
-    public CoffeeDTO findById(Long id) {
-        Coffee coffee = this.coffeeRepository.findById(id).orElseThrow();
+    public CoffeeDTO findByName(String name) {
+        Coffee coffee = coffeeRepository.findByName(name).orElseThrow(EntityNotFoundException::new);
         return coffeeMapper.apply(coffee);
     }
 
-    public List<Coffee> findAll() {
-        return this.coffeeRepository.findAll();
+    public CoffeeDTO findById(Long id) {
+        Coffee coffee = coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return coffeeMapper.apply(coffee);
     }
 
-    public Coffee save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
+    public List<CoffeeDTO> findAll() {
+        return coffeeRepository.findAll().stream()
+                .map(coffee -> coffeeMapper.apply(coffee))
+                .toList();
+    }
+
+    public CoffeeDTO save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
         try {
             String imageName = "no_image.jpg";
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -50,8 +54,8 @@ public class CoffeeService {
                     coffeeDTO.price(),
                     imageName
             );
-
-            return this.coffeeRepository.save(coffee);
+            Coffee newCoffee = coffeeRepository.save(coffee);
+            return coffeeMapper.apply(newCoffee);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
