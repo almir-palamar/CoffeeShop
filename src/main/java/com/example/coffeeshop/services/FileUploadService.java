@@ -15,11 +15,15 @@ public class FileUploadService {
 
     private static final Path ROOT_LOCATION = Paths.get("src/main/resources/images");
 
-    public void storeFile(String fileName, MultipartFile file) throws IOException {
-        Path destinationFile = ROOT_LOCATION.resolve(Paths.get(fileName))
-                .normalize().toAbsolutePath();
+    public void storeFile(String fileName, MultipartFile file) {
+        try {
+            Path destinationFile = ROOT_LOCATION.resolve(Paths.get(fileName))
+                    .normalize().toAbsolutePath();
 
-        Files.write(destinationFile, file.getBytes());
+            Files.write(destinationFile, file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

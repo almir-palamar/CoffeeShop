@@ -5,6 +5,7 @@ import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
+@Profile("dev")
 public class UserSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
@@ -24,18 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // force DataJpaTest to use MySQLContainer
 @Transactional(propagation = Propagation.NOT_SUPPORTED)                      // enables to see changes in db
-@Rollback                                                                    // add manual rollback after each test as the @Transactional is disabled
 class CoffeeRepositoryTest extends CoffeeShopApplicationTests {
-
-    @Autowired
-    private CoffeeRepository coffeeRepository;
 
     @Container
     @ServiceConnection
     public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0")
             .withUsername("user")
             .withPassword("pass")
-            .withDatabaseName("coffeeshop");
+            .withDatabaseName("coffeeShop");
+
+    @Autowired
+    private CoffeeRepository coffeeRepository;
 
     @Test
     void shouldReturnCoffeeById() {

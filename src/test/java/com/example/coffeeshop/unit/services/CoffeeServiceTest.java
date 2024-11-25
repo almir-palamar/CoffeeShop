@@ -6,48 +6,31 @@ import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.services.CoffeeService;
-import com.example.coffeeshop.services.FileUploadService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CoffeeServiceTest extends CoffeeShopApplicationTests {
 
-    @Autowired
-    private static CoffeeService coffeeService;
+    @InjectMocks
+    private CoffeeService coffeeService;
 
     @Mock
     private CoffeeRepository coffeeRepository;
 
     @Mock
-    private FileUploadService fileUploadService;
-
-    @Mock
     private CoffeeMapper coffeeMapper;
-
-    @Mock
-    private MultipartFile multipartFile;
-
-    @BeforeEach
-    void setUp() {
-        coffeeService = new CoffeeService(coffeeRepository, fileUploadService, coffeeMapper);
-    }
 
     @Test
     void shouldReturnCoffeeByName() {
@@ -59,7 +42,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 .price(1.60f)
                 .build();
 
-        when(coffeeRepository.findByName(espresso.getName())).thenReturn(Optional.ofNullable(espresso));
+        when(coffeeRepository.findByName(espresso.getName())).thenReturn(Optional.of(espresso));
         when(coffeeMapper.apply(espresso)).thenReturn(
                 new CoffeeDTO(
                         espresso.getName(),
@@ -137,22 +120,29 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 1.60f
         );
 
-        Coffee espresso = new Coffee("Espresso", 40, 8, 1.60f, null);
-        M
+        Coffee espresso = new Coffee(
+                "Espresso",
+                40,
+                8,
+                1.60f,
+                null
+        );
 
-        when(coffeeRepository.save(any(Coffee.class))).thenReturn(espresso);
+        when(coffeeRepository.save(espresso)).thenReturn(espresso);
         when(coffeeMapper.apply(espresso)).thenReturn(
-                new CoffeeDTO(
-                        espresso.getName(),
-                        espresso.getBrewTime(),
-                        espresso.getCaffeineGram(),
-                        espresso.getPrice()
-                )
+                espressoDTO
         );
 
         CoffeeDTO newCoffeeDTO = coffeeService.save(espressoDTO, null);
 
         assertThat(newCoffeeDTO.name()).isEqualTo(espresso.getName());
-        verify(coffeeRepository).save(espresso);
+
+        ArgumentCaptor<Coffee> coffeeArgumentCaptor = ArgumentCaptor.forClass(Coffee.class);
+
+        verify(coffeeRepository).save(coffeeArgumentCaptor.capture());
+
+        Coffee capturedCoffee = coffeeArgumentCaptor.getValue();
+
+        assertThat(capturedCoffee).isEqualTo(espresso);
     }
 }

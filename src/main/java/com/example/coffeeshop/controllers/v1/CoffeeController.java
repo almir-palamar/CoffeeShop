@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +29,8 @@ public class CoffeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<CoffeeDTO>> getCoffees() {
-        return ResponseEntity.status(HttpStatus.OK).body(coffeeService.findAll());
+    public List<CoffeeDTO> getCoffees() {
+        return coffeeService.findAll();
     }
 
     @PostMapping

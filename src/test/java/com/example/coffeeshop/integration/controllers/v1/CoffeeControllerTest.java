@@ -31,7 +31,7 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
 
         mvc.perform(request)
                 .andExpect(status().isOk())
-                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
     }
 
@@ -41,7 +41,7 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
 
         String newCoffee = """     
                 {
-                    "name": "Machiatto",
+                    "name": "Machiattoo",
                     "brewTime": 40,
                     "caffeineGram": 9,
                     "price": 1.40
@@ -55,7 +55,7 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
         MvcResult result = mvc.perform(request)
                 .andExpect(status().isCreated()).andReturn();
 
-        assertThat(result.getResponse().getContentAsString()).contains("Machiatto");
+        assertThat(result.getResponse().getContentAsString()).contains("Machiattoo");
     }
 
     @Test

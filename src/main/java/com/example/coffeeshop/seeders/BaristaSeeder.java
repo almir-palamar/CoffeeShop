@@ -6,6 +6,7 @@ import com.example.coffeeshop.repositories.BaristaRepository;
 import com.example.coffeeshop.repositories.EspressoMachineRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Component
 @Order(2)
 @AllArgsConstructor
+@Profile("dev")
 public class BaristaSeeder implements CommandLineRunner {
 
     private final BaristaRepository baristaRepository;

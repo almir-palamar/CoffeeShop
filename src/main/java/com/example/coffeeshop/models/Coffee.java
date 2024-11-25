@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -46,4 +47,16 @@ public class Coffee {
         this.imagePath = imagePath;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Coffee coffee = (Coffee) obj;
+        return Objects.equals(name, coffee.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }

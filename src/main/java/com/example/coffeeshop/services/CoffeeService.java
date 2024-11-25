@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,26 +38,22 @@ public class CoffeeService {
     }
 
     public CoffeeDTO save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
-        try {
-            String imageName = "no_image.jpg";
-            if (imageFile != null && !imageFile.isEmpty()) {
-                String imageFileExtension = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
-                imageName = UUID.randomUUID() + "_" + coffeeDTO.name() + imageFileExtension;
-                fileUploadService.storeFile(imageName, imageFile);
-            }
-
-            Coffee coffee = new Coffee(
-                    coffeeDTO.name(),
-                    coffeeDTO.brewTime(),
-                    coffeeDTO.caffeineGram(),
-                    coffeeDTO.price(),
-                    imageName
-            );
-            Coffee newCoffee = coffeeRepository.save(coffee);
-            return coffeeMapper.apply(newCoffee);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        String imageName = "no_image.jpg";
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageFileExtension = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
+            imageName = UUID.randomUUID() + "_" + coffeeDTO.name() + imageFileExtension;
+            fileUploadService.storeFile(imageName, imageFile);
         }
+
+        Coffee coffee = new Coffee(
+                coffeeDTO.name(),
+                coffeeDTO.brewTime(),
+                coffeeDTO.caffeineGram(),
+                coffeeDTO.price(),
+                imageName
+        );
+        Coffee newCoffee = coffeeRepository.save(coffee);
+        return coffeeMapper.apply(newCoffee);
     }
 
     public Coffee update(Coffee coffee, Long id) {

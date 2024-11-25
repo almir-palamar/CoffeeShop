@@ -4,11 +4,13 @@ import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
 @AllArgsConstructor
+@Profile("dev")
 public class CoffeeSeeder implements CommandLineRunner {
 
     private final CoffeeRepository coffeeRepository;
