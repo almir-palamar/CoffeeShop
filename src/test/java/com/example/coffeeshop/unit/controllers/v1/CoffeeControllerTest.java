@@ -55,8 +55,7 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
 
         when(coffeeService.findAll()).thenReturn(allCoffees);
 
-        // this returns ResponseEntity<List<CoffeeDTO>> check if ResponseEntity is needed
-        List<CoffeeDTO> foundCoffees = (List<CoffeeDTO>) coffeeController.getCoffees();
+        List<CoffeeDTO> foundCoffees = coffeeController.getCoffees();
 
         assertThat(foundCoffees.size()).isEqualTo(allCoffees.size());
         assertThat(foundCoffees.getFirst().name()).isEqualTo(allCoffees.getFirst().name());
