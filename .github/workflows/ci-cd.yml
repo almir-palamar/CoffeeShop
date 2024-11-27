@@ -26,6 +26,9 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Build with Maven with test Skipping
+        env:
+          SPRING_MAIL_USERNAME: ${{ secrets.SPRING_MAIL_USERNAME }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
         run: mvn clean package -Dmaven.test.skip
 
   test:
