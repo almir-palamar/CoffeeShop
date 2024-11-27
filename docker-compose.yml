@@ -1,9 +1,11 @@
 services:
-  cs-mysql:
+
+  coffeeshop-mysql:
     image: mysql:8.3.0
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: coffeeshop
     ports:
       - "3306:3306"
     volumes:
@@ -12,14 +14,15 @@ services:
     networks:
       - coffeeShop
 
-  cs-spring:
+  coffeeshop-springboot:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      - cs-mysql
+       coffeeshop-mysql:
+         condition: service_started
     volumes:
       - .:/coffeeShop
     networks:

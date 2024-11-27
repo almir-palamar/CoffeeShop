@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 @Order(1)
 @AllArgsConstructor
-@Profile("dev")
+@Profile({"docker", "default"})
 public class EspressoMachineSeeder implements CommandLineRunner {
 
     private final EspressoMachineRepository espressoMachineRepository;

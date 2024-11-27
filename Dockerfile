@@ -1,7 +1,7 @@
 FROM maven:3.8.8-eclipse-temurin-21-alpine AS build
 EXPOSE 8080
-WORKDIR /app
+WORKDIR .
 COPY pom.xml .
-COPY src /src
+COPY src ./src
 RUN mvn clean package -Dmaven.test.skip
-ENTRYPOINT ["java","-jar", "./target/coffeeshop-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=docker", "target/CoffeeShop-0.0.1-SNAPSHOT.jar"]

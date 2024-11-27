@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-@Profile("dev")
+@Profile({"docker", "default"})
 public class UserSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Component
 @Order(2)
 @AllArgsConstructor
-@Profile("dev")
+@Profile({"docker", "default"})
 public class BaristaSeeder implements CommandLineRunner {
 
     private final BaristaRepository baristaRepository;

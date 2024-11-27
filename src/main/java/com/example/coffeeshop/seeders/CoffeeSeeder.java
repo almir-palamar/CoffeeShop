@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-@Profile("dev")
+@Profile({"docker", "default"})
 public class CoffeeSeeder implements CommandLineRunner {
 
     private final CoffeeRepository coffeeRepository;
