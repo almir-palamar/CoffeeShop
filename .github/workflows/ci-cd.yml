@@ -26,7 +26,7 @@ jobs:
           java-version: '21'
           cache: maven
       - name: Build with Maven
-        run: java CoffeeShop.java
+        run: mvn clean package
 
   test:
     runs-on: ubuntu-latest
