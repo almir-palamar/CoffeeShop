@@ -23,17 +23,17 @@ public class CoffeeService {
 
     public CoffeeDTO findByName(String name) {
         Coffee coffee = coffeeRepository.findByName(name).orElseThrow(EntityNotFoundException::new);
-        return coffeeMapper.apply(coffee);
+        return coffeeMapper.toCoffeeDTO(coffee);
     }
 
     public CoffeeDTO findById(Long id) {
         Coffee coffee = coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return coffeeMapper.apply(coffee);
+        return coffeeMapper.toCoffeeDTO(coffee);
     }
 
     public List<CoffeeDTO> findAll() {
         return coffeeRepository.findAll().stream()
-                .map(coffee -> coffeeMapper.apply(coffee))
+                .map(coffeeMapper::toCoffeeDTO)
                 .toList();
     }
 
@@ -53,7 +53,7 @@ public class CoffeeService {
                 imageName
         );
         Coffee newCoffee = coffeeRepository.save(coffee);
-        return coffeeMapper.apply(newCoffee);
+        return coffeeMapper.toCoffeeDTO(newCoffee);
     }
 
     public Coffee update(Coffee coffee, Long id) {

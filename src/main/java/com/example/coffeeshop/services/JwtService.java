@@ -1,6 +1,7 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
+import com.example.coffeeshop.mappers.JwtTokenMapper;
 import com.example.coffeeshop.models.JwtToken;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.JwtRepository;
@@ -10,7 +11,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${jwt.token.secret}")
@@ -32,10 +34,7 @@ public class JwtService {
     private Long jwtExpiration;
 
     private final JwtRepository jwtRepository;
-
-    public JwtService(JwtRepository jwtRepository) {
-        this.jwtRepository = jwtRepository;
-    }
+    private final JwtTokenMapper jwtTokenMapper;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -67,8 +66,8 @@ public class JwtService {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
         invalidateOldTokens(user.getId());
-        jwtRepository.save(new JwtToken(jwtToken, false, user));
-        return new JwtTokenDTO(jwtToken);
+        JwtToken newJwtToken = jwtRepository.save(new JwtToken(jwtToken, false, user));
+        return jwtTokenMapper.toJwtTokenDTO(newJwtToken);
     }
 
     private boolean isTokenExpired(String token) {

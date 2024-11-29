@@ -43,7 +43,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 .build();
 
         when(coffeeRepository.findByName(espresso.getName())).thenReturn(Optional.of(espresso));
-        when(coffeeMapper.apply(espresso)).thenReturn(
+        when(coffeeMapper.toCoffeeDTO(espresso)).thenReturn(
                 new CoffeeDTO(
                         espresso.getName(),
                         espresso.getBrewTime(),
@@ -68,7 +68,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 .build();
 
         when(coffeeRepository.findById(espresso.getId())).thenReturn(Optional.of(espresso));
-        when(coffeeMapper.apply(espresso)).thenReturn(
+        when(coffeeMapper.toCoffeeDTO(espresso)).thenReturn(
                 new CoffeeDTO(
                         espresso.getName(),
                         espresso.getBrewTime(),
@@ -95,7 +95,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
         List<Coffee> allCoffees = List.of(espresso);
 
         when(coffeeRepository.findAll()).thenReturn(allCoffees);
-        when(coffeeMapper.apply(any(Coffee.class))).thenReturn(
+        when(coffeeMapper.toCoffeeDTO(any(Coffee.class))).thenReturn(
                 new CoffeeDTO(
                         espresso.getName(),
                         espresso.getBrewTime(),
@@ -129,7 +129,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
         );
 
         when(coffeeRepository.save(espresso)).thenReturn(espresso);
-        when(coffeeMapper.apply(espresso)).thenReturn(
+        when(coffeeMapper.toCoffeeDTO(espresso)).thenReturn(
                 espressoDTO
         );
 
