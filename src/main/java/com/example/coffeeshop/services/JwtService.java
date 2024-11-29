@@ -105,7 +105,8 @@ public class JwtService {
 
     private void invalidateOldTokens(Long userId) {
         List<JwtToken> validOldTokens = jwtRepository.findValidTokensByUserId(userId);
-        validOldTokens.forEach(token -> invalidateToken(token.getToken()));
+        validOldTokens.forEach(token -> token.setRevoked(true));
+        jwtRepository.saveAll(validOldTokens);
     }
 
 }

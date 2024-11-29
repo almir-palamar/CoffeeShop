@@ -1,6 +1,7 @@
 package com.example.coffeeshop.models;
 
 import com.example.coffeeshop.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<JwtToken> jwtTokens;
 

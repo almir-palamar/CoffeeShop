@@ -21,8 +21,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenDTO> login(@RequestBody LoginDTO loginDTO) {
-        return ResponseEntity.ok(authService.login(loginDTO));
+    public JwtTokenDTO login(@RequestBody LoginDTO loginDTO) {
+        return authService.login(loginDTO);
     }
 
     @PostMapping("/register")
