@@ -6,10 +6,12 @@ import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,10 +33,10 @@ public class CoffeeService {
         return coffeeMapper.toCoffeeDTO(coffee);
     }
 
-    public List<CoffeeDTO> findAll() {
-        return coffeeRepository.findAll().stream()
-                .map(coffeeMapper::toCoffeeDTO)
-                .toList();
+    public Page<CoffeeDTO> findAll(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Coffee> coffeePage = coffeeRepository.findAll(pageable);
+        return coffeePage.map(coffeeMapper::toCoffeeDTO);
     }
 
     public CoffeeDTO save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {

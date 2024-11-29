@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,10 @@ public class CoffeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CoffeeDTO> getCoffees() {
-        return coffeeService.findAll();
+    public Page<CoffeeDTO> getCoffees(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return coffeeService.findAll(page, size);
     }
 
     @PostMapping
