@@ -4,12 +4,13 @@ import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.controllers.v1.CoffeeController;
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
 import com.example.coffeeshop.services.CoffeeService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 
@@ -44,7 +45,6 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
     }
 
     @Test
-    @Disabled
     void shouldReturnAllCoffees() {
         List<CoffeeDTO> allCoffees = List.of(
                 new CoffeeDTO(
@@ -54,14 +54,16 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
                         1.60f
                 )
         );
+        int page = 0;
+        int pageSize = 10;
+        Page<CoffeeDTO> coffeePage = new PageImpl<>(allCoffees);
 
-        when(coffeeService.findAll()).thenReturn(allCoffees);
+        when(coffeeService.findAll(page, pageSize)).thenReturn(coffeePage);
 
-        List<CoffeeDTO> foundCoffees = coffeeController.getCoffees();
+        Page<CoffeeDTO> foundCoffees = coffeeController.getCoffees(page, pageSize);
 
-        assertThat(foundCoffees.size()).isEqualTo(allCoffees.size());
-        assertThat(foundCoffees.getFirst().name()).isEqualTo(allCoffees.getFirst().name());
-//        verify(coffeeService).findAll();
-
+        assertThat(foundCoffees.getSize()).isEqualTo(allCoffees.size());
+        assertThat(foundCoffees.getContent().getFirst().name()).isEqualTo(allCoffees.getFirst().name());
+        verify(coffeeService).findAll(page, pageSize);
     }
 }

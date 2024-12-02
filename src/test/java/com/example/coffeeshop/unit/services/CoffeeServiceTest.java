@@ -6,13 +6,16 @@ import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.services.CoffeeService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +88,6 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
     }
 
     @Test
-    @Disabled
     void shouldReturnAllCoffees() {
         Coffee espresso = Coffee.builder()
                 .id(1L)
@@ -95,8 +97,11 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 .price(1.60f)
                 .build();
         List<Coffee> allCoffees = List.of(espresso);
+        int page = 0;
+        int pageSize = 10;
+        Pageable pageable = PageRequest.of(page, pageSize);
 
-        when(coffeeRepository.findAll()).thenReturn(allCoffees);
+        when(coffeeRepository.findAll(pageable)).thenReturn(new PageImpl<>(allCoffees));
         when(coffeeMapper.toCoffeeDTO(any(Coffee.class))).thenReturn(
                 new CoffeeDTO(
                         espresso.getName(),
@@ -106,11 +111,11 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 )
         );
 
-        List<CoffeeDTO> expectedCoffees = coffeeService.findAll();
+        Page<CoffeeDTO> expectedCoffees = coffeeService.findAll(page, pageSize);
 
-        assertThat(expectedCoffees.size()).isEqualTo(allCoffees.size());
-        assertThat(expectedCoffees.getFirst().name()).isEqualTo(allCoffees.getFirst().getName());
-        verify(coffeeRepository).findAll();
+        assertThat(expectedCoffees.getSize()).isEqualTo(allCoffees.size());
+        assertThat(expectedCoffees.getContent().getFirst().name()).isEqualTo(allCoffees.getFirst().getName());
+        verify(coffeeRepository).findAll(pageable);
     }
 
     @Test

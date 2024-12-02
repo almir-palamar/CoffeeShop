@@ -1,6 +1,8 @@
 package com.example.coffeeshop.unit.services;
 
+import com.example.coffeeshop.dto.order.OrderDTO;
 import com.example.coffeeshop.enums.OrderEnum;
+import com.example.coffeeshop.mappers.OrderMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.repositories.OrderRepository;
@@ -26,6 +28,9 @@ class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private OrderMapper orderMapper;
 
     @Test
     void shouldFindOrderById() {
@@ -84,8 +89,7 @@ class OrderServiceTest {
 
     @Test
     @Disabled
-    void shoudSaveOrder() {
-        //TODO create objectMapper for Order & OrderDTO
+    void shouldSaveOrder() {
         List<Coffee> orderCoffees = List.of(
                 Coffee.builder()
                         .id(1L)
@@ -101,10 +105,13 @@ class OrderServiceTest {
                 .status(OrderEnum.Status.PENDING)
                 .coffees(orderCoffees)
                 .build();
+        OrderDTO orderDTO = orderMapper.toOrderDTO(order);
 
         when(orderRepository.save(order)).thenReturn(order);
+        when(orderMapper.toOrderDTO(order)).thenReturn(orderDTO);
 
-//        Order newOrder = orderService.save(order);
+//        OrderDTO newOrder = orderService.save(orderDTO);
+        //TODO refactor other app parts (Controller & Service)
 
     }
 

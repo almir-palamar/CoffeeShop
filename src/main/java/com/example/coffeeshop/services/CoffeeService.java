@@ -8,7 +8,6 @@ import com.example.coffeeshop.repositories.CoffeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +33,7 @@ public class CoffeeService {
     }
 
     public Page<CoffeeDTO> findAll(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Coffee> coffeePage = coffeeRepository.findAll(pageable);
+        Page<Coffee> coffeePage = coffeeRepository.findAll(PageRequest.of(page, size));
         return coffeePage.map(coffeeMapper::toCoffeeDTO);
     }
 
