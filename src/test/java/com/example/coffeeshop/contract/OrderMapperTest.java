@@ -7,6 +7,7 @@ import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.mappers.OrderMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
+import com.example.coffeeshop.models.OrderItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,11 +29,10 @@ class OrderMapperTest {
 
     @Test
     void shouldReturnOrderDTO() {
-        Order order = Order.builder()
-                .id(1L)
-                .type(OrderEnum.Type.TO_GO)
-                .coffees(
-                        List.of(Coffee.builder()
+        List<OrderItem> orderItems = List.of(
+                OrderItem.builder()
+                        .coffee(
+                                Coffee.builder()
                                         .id(1L)
                                         .name("Espresso")
                                         .caffeineGram(8)
@@ -40,14 +40,21 @@ class OrderMapperTest {
                                         .price(1.60f)
                                         .build()
                         )
-                )
+                        .quantity(1).build()
+        );
+
+        Order order = Order.builder()
+                .id(1L)
+                .type(OrderEnum.Type.TO_GO)
                 .status(OrderEnum.Status.PENDING)
+                .orderItems(orderItems)
                 .build();
 
         OrderDTO orderDTO = orderMapper.toOrderDTO(order);
 
         assertThat(orderDTO.type()).isEqualTo(order.getType());
-        assertThat(orderDTO.coffees().size()).isEqualTo(order.getCoffees().size());
-        assertThat(orderDTO.coffees().getFirst()).isEqualTo(order.getCoffees().getFirst().getName());
+        assertThat(orderDTO.orderItems().size()).isEqualTo(order.getOrderItems().size());
+        assertThat(orderDTO.orderNumber()).isEqualTo(order.getOrderNumber());
+        assertThat(orderDTO.orderItems().getFirst()).isEqualTo(order.getOrderItems().getFirst());
     }
 }

@@ -1,10 +1,9 @@
 package com.example.coffeeshop.dto.order;
 
-import com.example.coffeeshop.models.Coffee;
+import com.example.coffeeshop.dto.coffee.CoffeeDTO;
 
 public record OrderItemDTO(
-        Coffee coffee,
-        Float total,
+        CoffeeDTO coffeeDTO,
         Integer quantity
 ) {
 }

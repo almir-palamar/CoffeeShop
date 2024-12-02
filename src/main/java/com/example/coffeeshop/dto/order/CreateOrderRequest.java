@@ -7,11 +7,10 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-public record OrderDTO(
-    @NotEmpty(message = "pick_at_least_one_coffee")
-    List<String> orderItems,
-    String orderNumber,
-    @Enumerated(value = EnumType.STRING)
-    OrderEnum.Type type,
-    OrderEnum.Status status
-) { }
+public record CreateOrderRequest(
+        @NotEmpty(message = "pick_at_least_one_coffee")
+        List<OrderItemDTO> orderItemDTOS,
+        @Enumerated(value = EnumType.STRING)
+        OrderEnum.Type type
+) {
+}

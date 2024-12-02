@@ -5,6 +5,7 @@ import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.models.Order;
+import com.example.coffeeshop.models.OrderItem;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -41,12 +42,15 @@ public class ProcessOrder extends Thread{
                 this.calculateCaffeineNeeded(), baristaToTakeOrder.getEspressoMachine());
     }
 
-
     private Integer calculateProcessingTime() {
-        return order.getCoffees().stream().mapToInt(Coffee::getBrewTime).sum();
+        return order.getOrderItems().stream().mapToInt(
+                order -> order.getCoffee().getBrewTime() * order.getQuantity()
+        ).sum();
     }
 
     private Integer calculateCaffeineNeeded() {
-        return order.getCoffees().stream().mapToInt(Coffee::getCaffeineGram).sum();
+        return order.getOrderItems().stream().mapToInt(
+                order -> order.getCoffee().getCaffeineGram() * order.getQuantity()
+        ).sum();
     }
 }

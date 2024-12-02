@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,6 +31,8 @@ public class Coffee {
     private Integer caffeineGram;
     private Float price;
     private String imagePath;
+    @OneToMany(mappedBy = "coffee")
+    private List<OrderItem> orderItems;
     @CreatedBy
     private Long createdBy;
     @CreatedDate

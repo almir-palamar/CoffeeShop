@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
@@ -20,7 +21,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany
-    private List<Coffee> coffees;
+    private List<OrderItem> orderItems;
+    @Column(unique = true)
+    private String orderNumber;
     @ManyToOne
     @Nullable
     @JoinColumn(name = "barista_id")
@@ -30,9 +33,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderEnum.Status status = OrderEnum.Status.PENDING;
 
-    public Order(List<Coffee> coffees, OrderEnum.Type type) {
-        this.coffees = coffees;
+    public Order(List<OrderItem> orderItems, OrderEnum.Type type) {
+        this.orderItems = orderItems;
         this.type = type;
+        this.orderNumber = UUID.randomUUID().toString();
     }
 
 }
