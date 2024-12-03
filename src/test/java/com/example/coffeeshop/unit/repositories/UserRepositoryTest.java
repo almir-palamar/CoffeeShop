@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
@@ -16,6 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @DataJpaTest
@@ -51,5 +54,25 @@ class UserRepositoryTest extends CoffeeShopApplicationTests {
         assertThat(foundUser.getEmail()).isEqualTo(user.getEmail());
         assertThat(foundUser.getFirstName()).isEqualTo(user.getFirstName());
         assertThat(foundUser.getLastName()).isEqualTo(user.getLastName());
+    }
+
+    @Test
+    void shouldReturnPageWithUsers() {
+        User user = User.builder()
+                .username("john")
+                .email("john@gmail.com")
+                .firstName("John")
+                .lastName("Doe")
+                .role(RoleEnum.USER)
+                .build();
+        userRepository.saveAndFlush(user);
+        int page = 0;
+        int pageSize = 10;
+
+        Page<User> allUsers = userRepository.findAll(PageRequest.of(page, pageSize));
+
+        assertEquals(1, allUsers.getTotalPages());
+        assertEquals(1, allUsers.getContent().size());
+        assertThat(allUsers.getContent().getFirst().getUsername()).isEqualTo(user.getUsername());
     }
 }

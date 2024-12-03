@@ -5,11 +5,12 @@ import com.example.coffeeshop.mappers.UserMapper;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,11 +24,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).get();
     }
 
-    public List<UserDTO> findAll() {
-        return userRepository.findAll()
-                .stream()
-                .map(userMapper::toUserDTO)
-                .toList();
+    public Page<UserDTO> findAll(Integer page, Integer pageSize, String sortBy) {
+        Page<User> userPage = userRepository.findAll(PageRequest.of(page, pageSize, Sort.by(sortBy)));
+        return userPage.map(userMapper::toUserDTO);
     }
 
     public User save(User newUser) {

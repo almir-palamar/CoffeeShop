@@ -4,10 +4,13 @@ import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
@@ -79,12 +82,15 @@ class CoffeeRepositoryTest extends CoffeeShopApplicationTests {
                 .price(1.60f)
                 .build();
         coffeeRepository.saveAndFlush(espresso);
+        int page = 0;
+        int pageSize = 10;
 
-        List<Coffee> allCoffees = coffeeRepository.findAll();
+        Page<Coffee> allCoffees = coffeeRepository.findAll(PageRequest.of(page, pageSize));
 
         assertThat(allCoffees).isNotNull();
-        assertEquals(1, allCoffees.size());
-        assertThat(allCoffees.getFirst().getName()).isEqualTo(espresso.getName());
+        assertEquals(1, allCoffees.getTotalPages());
+        assertEquals(1, allCoffees.getContent().size());
+        assertThat(allCoffees.getContent().getFirst().getName()).isEqualTo(espresso.getName());
     }
 
     @Test
