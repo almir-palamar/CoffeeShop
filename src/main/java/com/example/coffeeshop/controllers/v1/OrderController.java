@@ -2,7 +2,6 @@ package com.example.coffeeshop.controllers.v1;
 
 import com.example.coffeeshop.dto.order.CreateOrderRequest;
 import com.example.coffeeshop.dto.order.OrderDTO;
-import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.services.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
