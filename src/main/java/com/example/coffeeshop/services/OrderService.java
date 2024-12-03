@@ -53,9 +53,9 @@ public class OrderService {
                     orderItemDTO.quantity())
             );
         });
-        String orderNumber = UUID.randomUUID().toString();
+
         Float orderTotal = calculateTotal(orderItems);
-        Order order = new Order(orderItems, newOrderRequest.type(), orderNumber, orderTotal);
+        Order order = new Order(orderItems, newOrderRequest.type(), orderTotal);
         Order newOrder = orderRepository.save(order);
         orderItems.forEach(orderItem -> orderItem.setOrder(newOrder));
         orderItemRepository.saveAll(orderItems);

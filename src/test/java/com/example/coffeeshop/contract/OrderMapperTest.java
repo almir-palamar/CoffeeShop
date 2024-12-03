@@ -11,10 +11,10 @@ import com.example.coffeeshop.models.OrderItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -23,9 +23,6 @@ class OrderMapperTest {
 
     @InjectMocks
     private OrderMapper orderMapper;
-
-    @Mock
-    private CoffeeMapper coffeeMapper;
 
     @Test
     void shouldReturnOrderDTO() {
@@ -43,10 +40,12 @@ class OrderMapperTest {
                         .quantity(1).build()
         );
 
+        String orderNumber = UUID.randomUUID().toString();
         Order order = Order.builder()
                 .id(1L)
                 .type(OrderEnum.Type.TO_GO)
                 .status(OrderEnum.Status.PENDING)
+                .orderNumber(orderNumber)
                 .orderItems(orderItems)
                 .build();
 
@@ -55,6 +54,7 @@ class OrderMapperTest {
         assertThat(orderDTO.type()).isEqualTo(order.getType());
         assertThat(orderDTO.orderItems().size()).isEqualTo(order.getOrderItems().size());
         assertThat(orderDTO.orderNumber()).isEqualTo(order.getOrderNumber());
-        assertThat(orderDTO.orderItems().getFirst()).isEqualTo(order.getOrderItems().getFirst());
+        assertThat(orderDTO.orderItems().getFirst().quantity()).isEqualTo(order.getOrderItems().getFirst().getQuantity());
+        assertThat(orderDTO.orderItems().getFirst().name()).isEqualTo(order.getOrderItems().getFirst().getCoffee().getName());
     }
 }

@@ -35,10 +35,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderEnum.Status status = OrderEnum.Status.PENDING;
 
-    public Order(List<OrderItem> orderItems, OrderEnum.Type type, String orderNumber, Float total) {
+    public Order(List<OrderItem> orderItems, OrderEnum.Type type, Float total) {
         this.orderItems = orderItems;
         this.type = type;
-        this.orderNumber = orderNumber;
+        this.orderNumber = UUID.randomUUID().toString();
         this.total = total;
     }
 

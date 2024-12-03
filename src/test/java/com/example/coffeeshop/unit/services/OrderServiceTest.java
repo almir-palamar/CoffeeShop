@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -203,22 +203,12 @@ class OrderServiceTest {
                         .build()
         );
 
-        String orderNumber = UUID.randomUUID().toString();
-
-        Order order = new Order(
-                orderItems,
-                OrderEnum.Type.TO_GO,
-                orderNumber,
-                1.60f
-        );
-
-        OrderDTO orderDTO = new OrderDTO(
-                List.of(coffeeOrderItemDTO),
-                orderNumber,
-                1.60f,
-                OrderEnum.Type.TO_GO,
-                OrderEnum.Status.PENDING
-        );
+        Order order = Order.builder()
+                .orderItems(orderItems)
+                .total(1.60f)
+                .type(OrderEnum.Type.TO_GO)
+                .status(OrderEnum.Status.PENDING)
+                .build();
 
         CreateOrderRequest createOrderRequest = new CreateOrderRequest(
                 List.of(orderItemDTO),
@@ -226,8 +216,16 @@ class OrderServiceTest {
         );
 
         when(coffeeRepository.findByName("Espresso")).thenReturn(Optional.of(coffee));
-        when(orderRepository.save(order)).thenReturn(order);
-//        when(orderMapper.toOrderDTO(order)).thenReturn(orderDTO);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(orderMapper.toOrderDTO(order)).thenReturn(
+                new OrderDTO(
+                        List.of(coffeeOrderItemDTO),
+                        order.getOrderNumber(),
+                        order.getTotal(),
+                        order.getType(),
+                        order.getStatus()
+                )
+        );
 
         OrderDTO newOrderDTO = orderService.save(createOrderRequest);
 
@@ -239,14 +237,11 @@ class OrderServiceTest {
 
         Order capturedOrder = orderArgumentCaptor.getValue();
 
-        assertThat(capturedOrder.getOrderNumber()).isEqualTo(order.getOrderNumber());
-
-//        assertThat(newOrder.getOrderItems().size()).isEqualTo(order.getOrderItems().size());
-//        assertThat(newOrder.getStatus()).isEqualTo(order.getStatus());
-//        assertThat(newOrder.getType()).isEqualTo(order.getType());
-//        assertThat(newOrder.getOrderItems().getFirst().getQuantity()).isEqualTo(order.getOrderItems().getFirst().getQuantity());
-//        assertThat(newOrder.getOrderItems().getFirst().getCoffee().getName()).isEqualTo(order.getOrderItems().getFirst().getCoffee().getName());
-
+        assertThat(capturedOrder.getOrderItems().size()).isEqualTo(order.getOrderItems().size());
+        assertThat(capturedOrder.getStatus()).isEqualTo(order.getStatus());
+        assertThat(capturedOrder.getType()).isEqualTo(order.getType());
+        assertThat(capturedOrder.getOrderItems().getFirst().getQuantity()).isEqualTo(order.getOrderItems().getFirst().getQuantity());
+        assertThat(capturedOrder.getOrderItems().getFirst().getCoffee().getName()).isEqualTo(order.getOrderItems().getFirst().getCoffee().getName());
     }
 
     @Test
