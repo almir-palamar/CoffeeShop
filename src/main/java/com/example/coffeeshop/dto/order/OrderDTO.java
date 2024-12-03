@@ -1,17 +1,14 @@
 package com.example.coffeeshop.dto.order;
 
+import com.example.coffeeshop.dto.coffee.CoffeeOrderItemDTO;
 import com.example.coffeeshop.enums.OrderEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
 public record OrderDTO(
-    @NotEmpty(message = "pick_at_least_one_coffee")
-    List<String> orderItems,
+    List<CoffeeOrderItemDTO> orderItems,
     String orderNumber,
-    @Enumerated(value = EnumType.STRING)
+    Float orderTotal,
     OrderEnum.Type type,
     OrderEnum.Status status
 ) { }

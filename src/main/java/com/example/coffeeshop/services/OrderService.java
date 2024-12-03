@@ -2,12 +2,14 @@ package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.order.CreateOrderRequest;
 import com.example.coffeeshop.dto.order.OrderDTO;
+import com.example.coffeeshop.dto.order.OrderItemDTO;
 import com.example.coffeeshop.enums.OrderEnum;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.mappers.OrderMapper;
 import com.example.coffeeshop.models.Order;
 import com.example.coffeeshop.models.OrderItem;
 import com.example.coffeeshop.repositories.CoffeeRepository;
+import com.example.coffeeshop.repositories.OrderItemRepository;
 import com.example.coffeeshop.repositories.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +27,7 @@ public class OrderService {
 
     private final CoffeeRepository coffeeRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final OrderMapper orderMapper;
 
@@ -40,22 +44,34 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDTO save(@NonNull CreateOrderRequest createOrder) {
+    public OrderDTO save(@NonNull CreateOrderRequest newOrderRequest) {
         List<OrderItem> orderItems = new ArrayList<>();
 
-        createOrder.orderItemDTOS().forEach(orderItemDTO -> {
+        newOrderRequest.orderItems().forEach(orderItemDTO -> {
             orderItems.add(new OrderItem(
-                    coffeeRepository.findByName(orderItemDTO.coffeeDTO().name()).orElseThrow(EntityNotFoundException::new),
-                    orderItemDTO.quantity()));
+                    coffeeRepository.findByName(orderItemDTO.coffee().name()).orElseThrow(EntityNotFoundException::new),
+                    orderItemDTO.quantity())
+            );
         });
+        String orderNumber = UUID.randomUUID().toString();
+        Float orderTotal = calculateTotal(orderItems);
+        Order order = new Order(orderItems, newOrderRequest.type(), orderNumber, orderTotal);
+        Order newOrder = orderRepository.save(order);
+        orderItems.forEach(orderItem -> orderItem.setOrder(newOrder));
+        orderItemRepository.saveAll(orderItems);
 
-        Order newOrder = new Order(orderItems, createOrder.type());
         eventPublisher.publishEvent(newOrder);
-        return orderMapper.toOrderDTO(orderRepository.save(newOrder));
+        return orderMapper.toOrderDTO(newOrder);
     }
 
     public Integer countOrderByStatusIsAndType(OrderEnum.Status status, OrderEnum.Type type) {
         return orderRepository.countOrderByStatusIsAndType(status, type);
+    }
+
+    private Float calculateTotal(List<OrderItem> orderItems) {
+        return (float) orderItems.stream()
+                .mapToDouble(orderItem -> orderItem.getCoffee().getPrice() * orderItem.getQuantity())
+                .sum();
     }
 
 }

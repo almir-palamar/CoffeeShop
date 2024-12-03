@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "order_items")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -18,7 +19,8 @@ public class OrderItem {
     @JoinColumn(name = "coffee_id")
     private Coffee coffee;
     private Integer quantity;
-    @OneToMany
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 
     public OrderItem(Coffee coffee, Integer quantity) {

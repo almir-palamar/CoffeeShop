@@ -9,7 +9,7 @@ import java.util.List;
 
 public record CreateOrderRequest(
         @NotEmpty(message = "pick_at_least_one_coffee")
-        List<OrderItemDTO> orderItemDTOS,
+        List<OrderItemDTO> orderItems,
         @Enumerated(value = EnumType.STRING)
         OrderEnum.Type type
 ) {

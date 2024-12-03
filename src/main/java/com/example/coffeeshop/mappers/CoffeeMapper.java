@@ -1,6 +1,7 @@
 package com.example.coffeeshop.mappers;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
+import com.example.coffeeshop.dto.coffee.CoffeeOrderItemDTO;
 import com.example.coffeeshop.models.Coffee;
 import org.springframework.stereotype.Component;
 
