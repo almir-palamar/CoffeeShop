@@ -39,6 +39,7 @@ class UserRepositoryTest extends CoffeeShopApplicationTests {
     @Test
     void shouldFindUserByUsername() {
         User user = User.builder()
+                .id(1L)
                 .username("john")
                 .email("john@gmail.com")
                 .firstName("John")
@@ -59,6 +60,7 @@ class UserRepositoryTest extends CoffeeShopApplicationTests {
     @Test
     void shouldReturnPageWithUsers() {
         User user = User.builder()
+                .id(1L)
                 .username("john")
                 .email("john@gmail.com")
                 .firstName("John")
