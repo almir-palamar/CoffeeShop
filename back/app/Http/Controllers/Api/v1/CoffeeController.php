@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCoffeeRequest;
 use App\Http\Requests\UpdateCoffeeRequest;
 use App\Http\Response\HttpResponse;
 use App\Models\Coffee;
-use App\Repository\CoffeeRepository;
+use App\Services\CoffeeService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
 class CoffeeController extends Controller
 {
-    protected CoffeeRepository $repository;
+    protected CoffeeService $coffeeService;
 
-    public function __construct(CoffeeRepository $repository)
+    public function __construct(CoffeeService $coffeeService)
     {
         $this->middleware('auth', ['except' => ['index']]);
-        $this->repository = $repository;
+        $this->coffeeService = $coffeeService;
     }
 
     /**
@@ -27,7 +28,7 @@ class CoffeeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $coffees = Coffee::all();
+        $coffees = $this->coffeeService->index();
         return HttpResponse::success('Coffees', $coffees, 200);
     }
 
@@ -40,7 +41,7 @@ class CoffeeController extends Controller
     public function store(StoreCoffeeRequest $request): JsonResponse
     {
         try {
-            $result = $this->repository->store($request->validated());
+            $result = $this->coffeeService->store($request->validated());
             return HttpResponse::success('Created', $result, 201);
         } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);
@@ -57,7 +58,7 @@ class CoffeeController extends Controller
     public function update(UpdateCoffeeRequest $request, Coffee $coffee): JsonResponse
     {
         try {
-            $coffee = $this->repository->update($request->validated(), $coffee);
+            $coffee = $this->coffeeService->update($request->validated(), $coffee);
             return HttpResponse::success('Updated', $coffee);
         } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);
@@ -73,7 +74,7 @@ class CoffeeController extends Controller
     public function destroy(Coffee $coffee): JsonResponse
     {
         try {
-            $this->repository->delete($coffee);
+            $this->coffeeService->delete($coffee);
             return HttpResponse::success('Deleted', $coffee);
         } catch (Exception $e) {
             return HttpResponse::error($e->getMessage(), $e);

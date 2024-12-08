@@ -2,29 +2,11 @@ import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import Coffee from "../components/Coffee";
 import Receipt from "../components/Receipt/Receipt";
-import api from "../axios/axios";
-import { useEffect, useState } from "react";
+import useGetCoffees from "../hooks/useGetCoffees";
 
 function Home() {
-  const [coffees, setCoffees] = useState();
-  const [loader, setLoader] = useState(true);
 
-  useEffect(() => {
-    fetchCoffees();
-  }, []);
-
-  const fetchCoffees = async () => {
-    setLoader(true)
-    await api
-      .get("/coffees")
-      .then((response) => {
-        setCoffees(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      setLoader(false)
-  };
+  const { loader, coffees } = useGetCoffees();
 
   return (
     <>

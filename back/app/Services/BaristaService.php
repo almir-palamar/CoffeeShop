@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Jobs\ProcessOrderJob;
 use App\Models\Barista;
 use App\Models\Order;
-use Illuminate\Support\Facades\Log;
 
-class BaristaController extends Controller
+class BaristaService
 {
-
     public function prepareOrder(Barista $barista, Order $order): bool
     {
         if ($this->isThereEnoughCoffee($barista, $order->coffee_amount)) {
@@ -29,7 +27,6 @@ class BaristaController extends Controller
         $barista->update([
             'status' => 'fillingGrinder'
         ]);
-        Log::info('dodje ovde, vrijeme' . conf('constants.TIME_IN_SECONDS_TO_REFILL_GRINDER'));
         sleep(conf('constants.TIME_IN_SECONDS_TO_REFILL_GRINDER'));
         $barista->espresso_machine()->update([
             'grinder' => config('constants.GRINDER_CAPACITY')
@@ -37,7 +34,6 @@ class BaristaController extends Controller
         $barista->update([
             'status' => 'available'
         ]);
-        Log::info('zavrsio grindovanje');
         ProcessOrderJob::dispatch($order);
     }
 
@@ -45,4 +41,5 @@ class BaristaController extends Controller
     {
         return $barista->espresso_machine->grinder >= $coffeeAmount;
     }
+
 }

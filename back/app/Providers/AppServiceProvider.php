@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Repository\CoffeeRepository;
-use App\Repository\OrderRepository;
+use App\Repositories\CoffeeRepository;
+use App\Repositories\OrderRepository;
+use App\Repositories\RepositoryInterface;
+use App\Services\BaristaService;
 use Illuminate\Support\ServiceProvider;
-use RepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,10 +15,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->bind(RepositoryInterface::class, CoffeeRepository::class);
         $this->app->bind(RepositoryInterface::class, OrderRepository::class);
+        $this->app->singleton(BaristaService::class, function () {
+            return new BaristaService();
+        });
     }
 
     /**

@@ -2,10 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Enums\OrderSource;
 use App\Events\WebUIOrderReadyEvent;
-use App\Http\Controllers\BaristaController;
 use App\Models\Barista;
 use App\Models\Order;
+use App\Services\BaristaService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,7 +23,6 @@ class ProcessOrderJob implements ShouldQueue
     public int $backoff = 90;
     protected Order $order;
 
-
     /**
      * Create a new job instance.
      *
@@ -38,12 +38,15 @@ class ProcessOrderJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle(): void
+    public function handle(BaristaService $baristaService): void
     {
-        $barista = Barista::where('status', 'available')->first();
+        // this sould not be done by an job
+        // all bussines logic move to service and simplify
+        // this job just to call method from service
+
+        $barista = Barista::where('status', 'available')->first(); // should utilize round-robin
         if (!is_null($barista)) {
-            $baristaController = new BaristaController();
-            $baristaCanDeliverOrder = $baristaController->prepareOrder($barista, $this->order);
+            $baristaCanDeliverOrder = $baristaService->prepareOrder($barista, $this->order);
             if ($baristaCanDeliverOrder) {
                 sleep($this->order->processing_time);
                 $barista->status = 'available';
@@ -51,7 +54,7 @@ class ProcessOrderJob implements ShouldQueue
                 $this->order->barista_id = $barista->id;
                 $this->order->status = 'delivered';
                 $this->order->save();
-                if ($this->order->type === 'App\Models\OrderWebUI') {
+                if ($this->order->type === OrderSource::WebUIOrder) {
                     event(new WebUIOrderReadyEvent($this->order));
                 }
             }

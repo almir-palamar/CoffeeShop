@@ -7,14 +7,13 @@ import CardMedia from "@mui/material/CardMedia";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EuroSymbolIcon from "@mui/icons-material/EuroSymbol";
 import Chip from "@mui/material/Chip";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import AddIcon from '@mui/icons-material/Add';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import { useDispatch } from "react-redux";
 import { addItem } from "../store/OrderSlice";
 
 function Coffee({coffee}) {
   const dispatch = useDispatch();
-
   return (
     <>
       <Card
@@ -94,7 +93,7 @@ function Coffee({coffee}) {
           <Button
             variant="contained"
             style={{ width: "100%", borderRadius: 0, minHeight: 48 }}
-            startIcon={<PlaylistAddIcon />}
+            startIcon={<AddIcon />}
             color="primary"
             size="large"
             disableElevation

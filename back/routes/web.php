@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\v1\CoffeeController;
+use App\Http\Controllers\Api\v1\OrderController as OrderToGoController;
+use App\Http\Controllers\App\OrderController;
 use App\Http\Middleware\CheckPendingOrders;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CoffeeController;
-use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,14 +21,16 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);
 });
 
-Route::apiResources([
-    '/coffees' => CoffeeController::class,
-    '/orders' => OrderController::class
-]);
+Route::prefix('v1')->group(function () {
+    Route::apiResources([
+        '/coffees' => CoffeeController::class,
+        '/orders' => OrderController::class
+    ]);
 
-// coffee to go is accepted by bartender = checkPendingOrders
-Route::middleware(CheckPendingOrders::class)->group(function () {
-    Route::post('/order-to-go', [OrderController::class, 'orderToGo']);
+    // coffee to go is accepted by bartender = checkPendingOrders
+    Route::middleware(CheckPendingOrders::class)->group(function () {
+        Route::post('/order-to-go', [OrderToGoController::class, 'store']);
+    });
 });
 
 require __DIR__ . '/auth.php';

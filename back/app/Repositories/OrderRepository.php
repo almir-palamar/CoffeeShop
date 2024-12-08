@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repositories;
 
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
@@ -11,15 +11,17 @@ class OrderRepository implements RepositoryInterface
     {
         try {
             DB::beginTransaction();
-            $order = $model::create([
+
+            $order = Order::create([
+                'type' => $model,
                 'total' => data_get($attributes, 'total'),
                 'processing_time' => data_get($attributes, 'processingTime'),
-                'coffee_amount' => data_get($attributes, 'coffeeAmount')
+                'coffee_amount' => data_get($attributes, 'coffeeAmount'),
             ]);
             $order->coffees()->attach(data_get($attributes, 'items'));
             $order->save();
             DB::commit();
-            return Order::findOrFail($order->id);
+            return $order;
         } catch (\Exception $e) {
             DB::rollBack();
             return $e;
