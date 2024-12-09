@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +19,8 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).get();
+    public User loadUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
     public Page<UserDTO> findAll(Integer page, Integer pageSize, String sortBy) {

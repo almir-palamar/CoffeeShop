@@ -1,6 +1,5 @@
 package com.example.coffeeshop.repositories;
 
-import com.example.coffeeshop.dto.user.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
