@@ -1,8 +1,8 @@
 package com.example.coffeeshop.exceptions;
 
 import com.example.coffeeshop.dto.ResponseDTO;
-import com.example.coffeeshop.validation.ValidationErrorResponse;
-import com.example.coffeeshop.validation.Violation;
+import com.example.coffeeshop.validations.ValidationErrorResponse;
+import com.example.coffeeshop.validations.Violation;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -23,8 +23,11 @@ import java.util.List;
 public class ExceptionHandlingControllerAdvice {
 
     /**
-     * MethodArgumentNotValidException -> @RequestBody ; class -> / ; method -> @Valid
-     * ConstraintValidationException -> @PathVariable, @RequestParam ; class -> @Validated; method -> constraint annotations
+     * MethodArgumentNotValidException -> @RequestBody, @ModelAttribute
+     * class level annotation -> / ; method level -> @Valid
+     *
+     * ConstraintViolationException -> @PathVariable, @RequestParam
+     * class level annotation -> @Validated; method level -> constraint annotations
      **/
 
     @ExceptionHandler(ConstraintViolationException.class)

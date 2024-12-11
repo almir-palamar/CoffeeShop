@@ -1,7 +1,6 @@
 package com.example.coffeeshop.mappers;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
-import com.example.coffeeshop.dto.coffee.CoffeeOrderItemDTO;
 import com.example.coffeeshop.models.Coffee;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,8 @@ public class CoffeeMapper {
                 coffee.getName(),
                 coffee.getBrewTime(),
                 coffee.getCaffeineGram(),
-                coffee.getPrice()
+                coffee.getPrice(),
+                coffee.getImagePath()
         );
     }
 

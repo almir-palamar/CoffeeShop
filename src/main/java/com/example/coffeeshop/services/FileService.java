@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 @Service
 @NoArgsConstructor
-public class FileUploadService {
+public class FileService {
 
     private static final Path ROOT_LOCATION = Paths.get("src/main/resources/images");
 
@@ -22,8 +22,26 @@ public class FileUploadService {
 
             Files.write(destinationFile, file.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getCause());
         }
+    }
+
+    public void deleteFile(String filename) {
+        try {
+            Path destinationFile = ROOT_LOCATION.resolve(Paths.get(filename))
+                    .normalize().toAbsolutePath();
+
+            Files.deleteIfExists(destinationFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String generateFileName(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+        return file.getName().toLowerCase();
     }
 
 }

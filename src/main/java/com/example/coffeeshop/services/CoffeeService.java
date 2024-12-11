@@ -1,6 +1,8 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
+import com.example.coffeeshop.dto.coffee.CreateCoffeeRequest;
+import com.example.coffeeshop.dto.coffee.UpdateCoffeeRequest;
 import com.example.coffeeshop.exceptions.EntityNotFoundException;
 import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
@@ -9,17 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
-    private final FileUploadService fileUploadService;
+    private final FileService fileService;
     private final CoffeeMapper coffeeMapper;
 
     public CoffeeDTO findByName(String name) {
@@ -37,45 +35,47 @@ public class CoffeeService {
         return coffeePage.map(coffeeMapper::toCoffeeDTO);
     }
 
-    public CoffeeDTO save(CoffeeDTO coffeeDTO, MultipartFile imageFile) {
-        String imageName = "no_image.jpg";
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageFileExtension = imageFile.getOriginalFilename().substring(imageFile.getOriginalFilename().lastIndexOf("."));
-            imageName = UUID.randomUUID() + "_" + coffeeDTO.name() + imageFileExtension;
-            fileUploadService.storeFile(imageName, imageFile);
+    public CoffeeDTO save(CreateCoffeeRequest createCoffeeRequest) {
+        String filename = fileService.generateFileName(createCoffeeRequest.coffeeImage());
+        if (filename != null) {
+            fileService.storeFile(filename, createCoffeeRequest.coffeeImage());
         }
-
         Coffee coffee = new Coffee(
-                coffeeDTO.name(),
-                coffeeDTO.brewTime(),
-                coffeeDTO.caffeineGram(),
-                coffeeDTO.price(),
-                imageName
+                createCoffeeRequest.name(),
+                createCoffeeRequest.brewTime(),
+                createCoffeeRequest.caffeineGram(),
+                createCoffeeRequest.price(),
+                filename
         );
         Coffee newCoffee = coffeeRepository.save(coffee);
         return coffeeMapper.toCoffeeDTO(newCoffee);
     }
 
-    public Coffee update(Coffee coffee, Long id) {
-        Optional<Coffee> coffeeOptional = this.coffeeRepository.findById(id);
-        if (coffeeOptional.isPresent()) {
-            Coffee updatedCoffee = coffeeOptional.get();
-            updatedCoffee.setName(coffee.getName());
-            updatedCoffee.setPrice(coffee.getPrice());
-            updatedCoffee.setBrewTime(coffee.getBrewTime());
-            updatedCoffee.setCaffeineGram(coffee.getCaffeineGram());
-            this.coffeeRepository.save(updatedCoffee);
-            return updatedCoffee;
+    public CoffeeDTO update(UpdateCoffeeRequest updateCoffeeRequest, Long id) {
+        Coffee updateCoffee = coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        //TODO: Different cases with deleting, updating coffee image
+        // change imagePath to fileName or imageName
+
+        String filename = fileService.generateFileName(updateCoffeeRequest.coffeeImage());
+        if (filename.equalsIgnoreCase(updateCoffee.getImagePath())) {
+            fileService.storeFile(filename, updateCoffeeRequest.coffeeImage());
         }
-        return null;
+
+        updateCoffee.setName(updateCoffeeRequest.name());
+        updateCoffee.setPrice(updateCoffeeRequest.price());
+        updateCoffee.setBrewTime(updateCoffeeRequest.brewTime());
+        updateCoffee.setCaffeineGram(updateCoffeeRequest.caffeineGram());
+        updateCoffee.setImagePath(filename);
+
+        coffeeRepository.save(updateCoffee);
+        return coffeeMapper.toCoffeeDTO(updateCoffee);
     }
 
-    public Coffee deleteById(Long id) {
-        Optional<Coffee> coffee = this.coffeeRepository.findById(id);
-        if (coffee.isPresent()) {
-            this.coffeeRepository.deleteById(id);
-            return coffee.get();
-        }
-        return null;
+    public CoffeeDTO deleteById(Long id) {
+        Coffee deleteCoffee = coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        fileService.deleteFile(deleteCoffee.getImagePath());
+        coffeeRepository.delete(deleteCoffee);
+        return coffeeMapper.toCoffeeDTO(deleteCoffee);
     }
 }

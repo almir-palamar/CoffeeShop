@@ -1,4 +1,4 @@
-package com.example.coffeeshop.validation;
+package com.example.coffeeshop.validations;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
