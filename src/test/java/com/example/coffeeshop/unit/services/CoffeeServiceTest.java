@@ -2,10 +2,12 @@ package com.example.coffeeshop.unit.services;
 
 import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.dto.coffee.CoffeeDTO;
+import com.example.coffeeshop.dto.coffee.CreateCoffeeRequest;
 import com.example.coffeeshop.mappers.CoffeeMapper;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import com.example.coffeeshop.services.CoffeeService;
+import com.example.coffeeshop.services.FileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -36,6 +38,9 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
     @Mock
     private CoffeeMapper coffeeMapper;
 
+    @Mock
+    private FileService fileService;
+
     @Test
     void shouldReturnCoffeeByName() {
         Coffee espresso = Coffee.builder()
@@ -52,7 +57,8 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                         espresso.getName(),
                         espresso.getBrewTime(),
                         espresso.getCaffeineGram(),
-                        espresso.getPrice()
+                        espresso.getPrice(),
+                        espresso.getImagePath()
                 )
         );
 
@@ -77,7 +83,8 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                         espresso.getName(),
                         espresso.getBrewTime(),
                         espresso.getCaffeineGram(),
-                        espresso.getPrice()
+                        espresso.getPrice(),
+                        espresso.getImagePath()
                 )
         );
 
@@ -107,7 +114,8 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                         espresso.getName(),
                         espresso.getBrewTime(),
                         espresso.getCaffeineGram(),
-                        espresso.getPrice()
+                        espresso.getPrice(),
+                        espresso.getImagePath()
                 )
         );
 
@@ -124,10 +132,19 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 "Espresso",
                 40,
                 8,
-                1.60f
+                1.60f,
+                null
         );
 
         Coffee espresso = new Coffee(
+                "Espresso",
+                40,
+                8,
+                1.60f,
+                null
+        );
+
+        CreateCoffeeRequest createCoffeeRequest = new CreateCoffeeRequest(
                 "Espresso",
                 40,
                 8,
@@ -140,7 +157,7 @@ class CoffeeServiceTest extends CoffeeShopApplicationTests {
                 espressoDTO
         );
 
-        CoffeeDTO newCoffeeDTO = coffeeService.save(espressoDTO, null);
+        CoffeeDTO newCoffeeDTO = coffeeService.save(createCoffeeRequest);
 
         assertThat(newCoffeeDTO.name()).isEqualTo(espresso.getName());
 

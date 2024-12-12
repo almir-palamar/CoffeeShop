@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -17,8 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,40 +53,44 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
     @WithMockUser(authorities = {"ADMIN"})
     void onCreateShouldReturnCreatedIfAdminLoggedIn() throws Exception {
 
-        String newCoffee = """     
-                {
-                    "name": "Machiattoo",
-                    "brewTime": 40,
-                    "caffeineGram": 9,
-                    "price": 1.40
-                }
-        """;
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "coffeeImage",
+                "espresso.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                getClass().getResourceAsStream("images/espresso.jpg")
+        );
 
-        RequestBuilder request = post("/api/v1/coffees")
-                .content(newCoffee)
-                .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = multipart("/api/v1/coffees")
+                .file(imageFile)
+                .param("name", "Machiatto")
+                .param("brewTime", "40")
+                .param("caffeineGram", "9")
+                .param("price", "1.40")
+                .contentType(MediaType.MULTIPART_FORM_DATA);
 
         MvcResult result = mvc.perform(request)
                 .andExpect(status().isCreated()).andReturn();
 
-        assertThat(result.getResponse().getContentAsString()).contains("Machiattoo");
+        assertThat(result.getResponse().getContentAsString()).contains("Machiatto");
     }
 
     @Test
     @WithMockUser(authorities = {"USER"})
     void onCreateShouldThrowExceptionIfUserLoggedIn() throws Exception {
 
-        String newCoffee = """     
-                {
-                    "name": "Machiatto",
-                    "brewTime": 40,
-                    "caffeineGram": 9,
-                    "price": 1.40
-                }
-        """;
+        MockMultipartFile fileImage = new MockMultipartFile(
+                "coffeeImage",
+                "espresso.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                getClass().getResourceAsStream("images/espresso.jpg")
+        );
 
-        RequestBuilder request = post("/api/v1/coffees")
-                .content(newCoffee)
+        RequestBuilder request = multipart("/api/v1/coffees")
+                .file(fileImage)
+                .param("name", "Machiatto")
+                .param("brewTime", "40")
+                .param("caffeineGram", "9")
+                .param("price", "1.40")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mvc.perform(request)

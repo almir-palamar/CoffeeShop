@@ -54,19 +54,19 @@ public class CoffeeService {
     public CoffeeDTO update(UpdateCoffeeRequest updateCoffeeRequest, Long id) {
         Coffee updateCoffee = coffeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        //TODO: Different cases with deleting, updating coffee image
-        // change imagePath to fileName or imageName
+        //TODO if deployed on AWS and S3Bucket when upload
+        // if it have the same key it will be replaced so maybe
+        // this logic of FileService should be scoped to dev profile
 
-        String filename = fileService.generateFileName(updateCoffeeRequest.coffeeImage());
-        if (filename.equalsIgnoreCase(updateCoffee.getImagePath())) {
-            fileService.storeFile(filename, updateCoffeeRequest.coffeeImage());
+        String newFilename = fileService.generateFileName(updateCoffeeRequest.coffeeImage());
+        if (newFilename.equalsIgnoreCase(updateCoffee.getImagePath())) {
+            fileService.updateFile(updateCoffee.getImagePath(), newFilename,updateCoffeeRequest.coffeeImage());
         }
-
         updateCoffee.setName(updateCoffeeRequest.name());
-        updateCoffee.setPrice(updateCoffeeRequest.price());
         updateCoffee.setBrewTime(updateCoffeeRequest.brewTime());
         updateCoffee.setCaffeineGram(updateCoffeeRequest.caffeineGram());
-        updateCoffee.setImagePath(filename);
+        updateCoffee.setPrice(updateCoffeeRequest.price());
+        updateCoffee.setImagePath(newFilename);
 
         coffeeRepository.save(updateCoffee);
         return coffeeMapper.toCoffeeDTO(updateCoffee);

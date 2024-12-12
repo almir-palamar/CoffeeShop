@@ -37,6 +37,21 @@ public class FileService {
         }
     }
 
+    public void updateFile(String oldFileName, String newFileName, MultipartFile newFile) {
+        try {
+            Path oldFileDestination = ROOT_LOCATION.resolve(Paths.get(oldFileName))
+                    .normalize().toAbsolutePath();
+            Files.deleteIfExists(oldFileDestination);
+
+            Path newFileDestination = ROOT_LOCATION.resolve(Paths.get(newFileName))
+                    .normalize().toAbsolutePath();
+
+            Files.write(newFileDestination, newFile.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public String generateFileName(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return null;

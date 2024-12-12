@@ -33,7 +33,8 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
                 "Espresso",
                 40,
                 8,
-                1.60f
+                1.60f,
+                "images/espresso.jpg"
         );
 
         when(coffeeService.findById(1L)).thenReturn(espressoDTO);
@@ -51,7 +52,8 @@ class CoffeeControllerTest extends CoffeeShopApplicationTests {
                         "Espresso",
                         40,
                         8,
-                        1.60f
+                        1.60f,
+                        "images/espresso.jpg"
                 )
         );
         int page = 0;

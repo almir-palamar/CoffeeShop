@@ -175,7 +175,8 @@ class OrderServiceTest {
                 "Espresso",
                 40,
                 8,
-                1.60f
+                1.60f,
+                null
         );
 
         Coffee coffee = Coffee.builder()
