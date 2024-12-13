@@ -13,16 +13,6 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Async
-    public void sendEmail(String to, String subject, String body) {
-        try {
-            Thread.sleep(5000L);
-            System.out.println("Sending email");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Async
     public void sendWelcomeEmail(String to) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(to);

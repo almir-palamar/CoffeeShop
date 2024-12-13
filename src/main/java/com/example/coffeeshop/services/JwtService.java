@@ -1,6 +1,7 @@
 package com.example.coffeeshop.services;
 
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
+import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.mappers.JwtTokenMapper;
 import com.example.coffeeshop.models.JwtToken;
 import com.example.coffeeshop.models.User;
@@ -48,7 +49,7 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenRevoked(token));
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !isTokenRevoked(token);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
@@ -90,16 +91,18 @@ public class JwtService {
     }
 
     public void invalidateToken(String token) {
+        JwtToken jwtToken = jwtRepository.findByToken(token.replace("Bearer ", ""))
+                .orElseThrow(() -> new UnauthorizedException("Invalid Token"));
         Claims claims = extractAllClaims(token.replace("Bearer ", ""));
         claims.setExpiration(new Date());
-        JwtToken jwtToken = jwtRepository.findByToken(token.replace("Bearer ", ""));
         jwtToken.setRevoked(true);
         jwtRepository.save(jwtToken);
     }
 
     public boolean isTokenRevoked(String token) {
-        JwtToken jwtToken = jwtRepository.findByToken(token);
-        return jwtToken != null && jwtToken.isRevoked();
+        JwtToken jwtToken = jwtRepository.findByToken(token)
+                .orElseThrow(() -> new UnauthorizedException("Invalid token"));
+        return jwtToken.isRevoked();
     }
 
     private void invalidateOldTokens(Long userId) {

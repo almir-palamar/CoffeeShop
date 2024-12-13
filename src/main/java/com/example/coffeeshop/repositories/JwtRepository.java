@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface JwtRepository extends JpaRepository<JwtToken, Long> {
 
-    public JwtToken findByToken(String token);
+    Optional<JwtToken> findByToken(String token);
 
     @Query("""
             select t
@@ -18,6 +19,6 @@ public interface JwtRepository extends JpaRepository<JwtToken, Long> {
             inner join User u on t.user.id=u.id
             where u.id = :userId and t.revoked = false
             """)
-    public List<JwtToken> findValidTokensByUserId(Long userId);
+    List<JwtToken> findValidTokensByUserId(Long userId);
 
 }

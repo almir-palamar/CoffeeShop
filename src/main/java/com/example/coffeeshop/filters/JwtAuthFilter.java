@@ -12,7 +12,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -49,11 +48,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             jwtToken = authHeader.substring(7);
             username = jwtService.extractUsername(jwtToken);
             User user = userService.loadUserByUsername(username);
-            if (!jwtService.isTokenValid(jwtToken, user)) {
-                throw new UnauthorizedException("Invalid token");
-            }
+            boolean isTokenValid = jwtService.isTokenValid(jwtToken, user);
 
-            if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (!username.isEmpty() && isTokenValid && SecurityContextHolder.getContext().getAuthentication() == null) {
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities()
@@ -61,8 +58,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 securityContext.setAuthentication(authToken);
                 SecurityContextHolder.setContext(securityContext);
+                filterChain.doFilter(request, response);
+            } else {
+                throw new UnauthorizedException("Invalid token!");
             }
-            filterChain.doFilter(request, response);
         } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }

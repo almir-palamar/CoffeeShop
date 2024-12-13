@@ -2,6 +2,7 @@ package com.example.coffeeshop.config;
 
 import com.example.coffeeshop.filters.JwtAuthFilter;
 import com.example.coffeeshop.filters.ToGoPendingOrdersFilter;
+import com.example.coffeeshop.services.LogoutHandlerConfig;
 import com.example.coffeeshop.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +17,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +33,7 @@ public class SecurityConfig {
     private final ToGoPendingOrdersFilter toGoPendingOrdersFilter;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final LogoutHandlerConfig logoutHandler;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -49,7 +53,6 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeConfig ->
@@ -58,7 +61,6 @@ public class SecurityConfig {
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/auth/register").permitAll()
-                                .requestMatchers("/api/v1/auth/logout").permitAll()
                                 .requestMatchers("/api/v1/orders/**").permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/coffees", "/api/v1/coffees/**").permitAll()
@@ -68,11 +70,20 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
+                .logout(logout ->
+                        logout.logoutUrl("/api/v1/auth/logout")
+                                .addLogoutHandler(logoutHandler)
+                                .logoutSuccessHandler(logoutSuccessHandler())
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(toGoPendingOrdersFilter, JwtAuthFilter.class)
-                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
-                        .logoutSuccessUrl("/api/v1/auth/login").permitAll())
                 .build();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        SecurityContextHolder.clearContext();
+        return (request, response, authentication) -> response.setStatus(204);
     }
 
 }

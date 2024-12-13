@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,22 +21,25 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public JwtTokenDTO login(@RequestBody LoginDTO loginDTO) {
         return authService.login(loginDTO);
     }
 
     @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public JwtTokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
         return authService.register(registerDTO);
     }
 
     @GetMapping("/logout")
     @SecurityRequirement(name = "JWTAuth")
-    public void logout(@RequestHeader("Authorization") String jwtToken) {
-        this.authService.logout(jwtToken);
+    public String logout(@RequestHeader("Authorization") String jwtToken) {
+        return "Successfully logged out!";
     }
 
     @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = "JWTAuth")
     public User me() {
         return authService.me();

@@ -3,14 +3,17 @@ package com.example.coffeeshop.services;
 import com.example.coffeeshop.dto.auth.JwtTokenDTO;
 import com.example.coffeeshop.dto.auth.LoginDTO;
 import com.example.coffeeshop.dto.auth.RegisterDTO;
+import com.example.coffeeshop.enums.RoleEnum;
 import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,10 +36,10 @@ public class AuthService {
                 registerDTO.username(),
                 registerDTO.email(),
                 passwordEncoder.encode(registerDTO.password()),
-                null
+                RoleEnum.USER
         );
         userService.save(user);
-        this.emailService.sendWelcomeEmail(registerDTO.email());
+        emailService.sendWelcomeEmail(registerDTO.email());
         return jwtService.generateToken(user);
     }
 
@@ -53,10 +56,9 @@ public class AuthService {
         return jwtService.generateToken(user.get());
     }
 
-    public void logout(String jwtToken) {
-        jwtService.invalidateToken(jwtToken);
-        SecurityContextHolder.clearContext();
-    }
+//    public String logout(String jwt) {
+//        return "redirect:/api/v1/auth/login";
+//    }
 
     public User me() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

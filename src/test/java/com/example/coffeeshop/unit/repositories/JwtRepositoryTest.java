@@ -50,7 +50,7 @@ class JwtRepositoryTest extends CoffeeShopApplicationTests {
                 .build();
         jwtRepository.saveAndFlush(jwtToken);
 
-        JwtToken foundJwtToken = jwtRepository.findByToken(jwtToken.getToken());
+        JwtToken foundJwtToken = jwtRepository.findByToken(jwtToken.getToken()).orElseThrow();
 
         assertThat(foundJwtToken).isNotNull();
         assertThat(foundJwtToken.getToken()).isEqualTo(jwtToken.getToken());
