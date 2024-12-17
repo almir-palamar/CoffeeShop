@@ -8,12 +8,10 @@ import com.example.coffeeshop.exceptions.UnauthorizedException;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -55,10 +53,6 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password()));
         return jwtService.generateToken(user.get());
     }
-
-//    public String logout(String jwt) {
-//        return "redirect:/api/v1/auth/login";
-//    }
 
     public User me() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

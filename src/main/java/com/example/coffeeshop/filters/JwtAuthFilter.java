@@ -47,7 +47,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             User user = userService.loadUserByUsername(username);
             boolean isTokenValid = jwtService.isTokenValid(jwtToken, user);
 
-            if (!username.isEmpty() && isTokenValid && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (!isTokenValid) {
+                throw new UnauthorizedException("Invalid token!");
+            }
+
+            if (!username.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user, null, user.getAuthorities()
@@ -56,8 +60,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 securityContext.setAuthentication(authToken);
                 SecurityContextHolder.setContext(securityContext);
                 filterChain.doFilter(request, response);
-            } else {
-                throw new UnauthorizedException("Invalid token!");
             }
         } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);

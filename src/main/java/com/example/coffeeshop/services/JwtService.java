@@ -93,6 +93,9 @@ public class JwtService {
     public void invalidateToken(String token) {
         JwtToken jwtToken = jwtRepository.findByToken(token.replace("Bearer ", ""))
                 .orElseThrow(() -> new UnauthorizedException("Invalid Token"));
+        if (jwtToken.isRevoked()) {
+            throw new UnauthorizedException("Invalid token");
+        }
         Claims claims = extractAllClaims(token.replace("Bearer ", ""));
         claims.setExpiration(new Date());
         jwtToken.setRevoked(true);

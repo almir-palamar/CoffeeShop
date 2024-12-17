@@ -7,12 +7,9 @@ import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.services.AuthService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +32,6 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public JwtTokenDTO register(@RequestBody @Valid RegisterDTO registerDTO) {
         return authService.register(registerDTO);
-    }
-
-    @GetMapping("/logout")
-    @SecurityRequirement(name = "JWTAuth")
-    public String logout(@RequestHeader("Authorization") String jwtToken,
-                         HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        logoutHandler.logout(request, response, authentication);
-        return "Successfully logged out!";
     }
 
     @GetMapping("/me")
