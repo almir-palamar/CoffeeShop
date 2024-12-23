@@ -1,39 +1,16 @@
 package com.example.coffeeshop.unit.repositories;
 
-import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.models.Coffee;
 import com.example.coffeeshop.repositories.CoffeeRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Testcontainers
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // force DataJpaTest to use MySQLContainer
-@Transactional(propagation = Propagation.NOT_SUPPORTED)                      // enables to see changes in db
-class CoffeeRepositoryTest extends CoffeeShopApplicationTests {
-
-    @Container
-    @ServiceConnection
-    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0")
-            .withUsername("user")
-            .withPassword("pass")
-            .withDatabaseName("coffeeShop");
+class CoffeeRepositoryTest extends RepositoryBaseTest {
 
     @Autowired
     private CoffeeRepository coffeeRepository;

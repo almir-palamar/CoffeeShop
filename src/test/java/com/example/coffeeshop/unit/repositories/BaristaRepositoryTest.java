@@ -1,36 +1,16 @@
 package com.example.coffeeshop.unit.repositories;
 
-import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.enums.BaristaStatusEnum;
 import com.example.coffeeshop.models.Barista;
 import com.example.coffeeshop.repositories.BaristaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@Testcontainers
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // force DataJpaTest to use MySQLContainer
-@Transactional(propagation = Propagation.NOT_SUPPORTED)                      // enables to see changes in db
-class BaristaRepositoryTest extends CoffeeShopApplicationTests {
-
-    @Container
-    @ServiceConnection
-    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0")
-                    .withUsername("user")
-                    .withPassword("pass")
-                    .withDatabaseName("coffeeShop");
+class BaristaRepositoryTest extends RepositoryBaseTest {
 
     @Autowired
     private BaristaRepository baristaRepository;

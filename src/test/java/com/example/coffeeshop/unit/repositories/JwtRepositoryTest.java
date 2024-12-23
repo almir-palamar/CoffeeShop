@@ -1,38 +1,18 @@
 package com.example.coffeeshop.unit.repositories;
 
-import com.example.coffeeshop.CoffeeShopApplicationTests;
 import com.example.coffeeshop.enums.RoleEnum;
 import com.example.coffeeshop.models.JwtToken;
 import com.example.coffeeshop.models.User;
 import com.example.coffeeshop.repositories.JwtRepository;
 import com.example.coffeeshop.repositories.UserRepository;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Propagation;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@DataJpaTest
-@Testcontainers
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-class JwtRepositoryTest extends CoffeeShopApplicationTests {
-
-    @Container
-    @ServiceConnection
-    public static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:8.3.0")
-            .withUsername("user")
-            .withPassword("pass")
-            .withDatabaseName("coffeeShop");
+class JwtRepositoryTest extends RepositoryBaseTest {
 
     @Autowired
     private JwtRepository jwtRepository;
